@@ -13,6 +13,8 @@ namespace Modbus
 {
     public partial class Form1 : Form
     {
+        const string broadcastTransaction = "Rozgłoszeniowa";
+        const string addressTransaction = "Adresowana";
         public Form1()
         {
             InitializeComponent();
@@ -23,10 +25,15 @@ namespace Modbus
             //Uzupełnianie comboBox (list rozwijanych) o dane
             comboBoxProtocole.Items.Add("Master");
             comboBoxProtocole.Items.Add("Slave");
-            comboBoxTransaction.Items.Add("Rozgłoszeniowa");
-            comboBoxTransaction.Items.Add("Adresowana");
+            comboBoxTransaction.Items.Add(broadcastTransaction);
+            comboBoxTransaction.Items.Add(addressTransaction);
+            comboBoxOrderCode.Items.Add(1);
+            comboBoxOrderCode.Items.Add(2);
 
-            for(int i = 0; i <= 10000; i = i + 100)
+            //odczytanie dostępnych portów wraz z wpisanie ich do rozwijanej listy
+            comboBoxPort.Items.AddRange(SerialPort.GetPortNames());
+
+            for (int i = 0; i <= 10000; i = i + 100)
             {
                 comboBoxTimeLimit.Items.Add(i);
                 comboBoxFrameCharSpace.Items.Add(i / 10);
@@ -41,6 +48,12 @@ namespace Modbus
             comboBoxTimeLimit.SelectedIndex = 0;
             comboBoxRetransAdres.SelectedIndex = 0;
             comboBoxFrameCharSpace.SelectedIndex = 0;
+            comboBoxOrderCode.SelectedIndex = 0;
+            if (comboBoxPort.Items.Count > 0)
+                comboBoxPort.SelectedIndex = 0;
+
+            //sortowanie
+            comboBoxPort.Sorted = true;
 
             //Blokada nieużywanych grup
             groupBoxMaster.Enabled = false;
@@ -69,10 +82,21 @@ namespace Modbus
 
         private void comboBoxTransaction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxTransaction.Text == "Adresowana")
-                textBoxTransactionAdres.Enabled = true;
-            else
+            if (comboBoxTransaction.Text == broadcastTransaction)
+            {
                 textBoxTransactionAdres.Enabled = false;
+                comboBoxOrderCode.SelectedIndex = 0;
+            }
+            else
+                textBoxTransactionAdres.Enabled = true;
+        }
+
+        private void comboBoxOrderCode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxOrderCode.Text=="2" && comboBoxTransaction.Text == broadcastTransaction)
+            {
+                comboBoxOrderCode.SelectedIndex = 0;
+            }
         }
     }
 }
