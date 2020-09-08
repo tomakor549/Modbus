@@ -31,12 +31,11 @@
             this.components = new System.ComponentModel.Container();
             this.comboBoxProtocole = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBoxMaster = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comboBoxTransaction = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxTransactionAdres = new System.Windows.Forms.TextBox();
             this.groupBoxSlave = new System.Windows.Forms.GroupBox();
             this.groupBoxFrame = new System.Windows.Forms.GroupBox();
             this.buttonMasterDataSend = new System.Windows.Forms.Button();
@@ -56,9 +55,12 @@
             this.label10 = new System.Windows.Forms.Label();
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.numericUpDownTransactionAdres = new System.Windows.Forms.NumericUpDown();
+            this.buttonConnect = new System.Windows.Forms.Button();
             this.groupBoxMaster.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxProtocole
@@ -67,7 +69,7 @@
             this.comboBoxProtocole.FormattingEnabled = true;
             this.comboBoxProtocole.Location = new System.Drawing.Point(15, 25);
             this.comboBoxProtocole.Name = "comboBoxProtocole";
-            this.comboBoxProtocole.Size = new System.Drawing.Size(154, 21);
+            this.comboBoxProtocole.Size = new System.Drawing.Size(99, 21);
             this.comboBoxProtocole.TabIndex = 0;
             this.comboBoxProtocole.SelectedIndexChanged += new System.EventHandler(this.comboBoxProtocole_SelectedIndexChanged);
             // 
@@ -79,6 +81,10 @@
             this.label1.Size = new System.Drawing.Size(157, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Rodzaj stacji protokołu Modbus";
+            // 
+            // serialPort
+            // 
+            this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // groupBoxMaster
             // 
@@ -104,7 +110,7 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textBoxTransactionAdres);
+            this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.comboBoxTransaction);
             this.groupBox2.Location = new System.Drawing.Point(6, 19);
@@ -112,7 +118,7 @@
             this.groupBox2.Size = new System.Drawing.Size(200, 123);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Rodzaj Transakcji";
+            this.groupBox2.Text = "Transakcja";
             // 
             // comboBoxTransaction
             // 
@@ -132,13 +138,6 @@
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Adres";
-            // 
-            // textBoxTransactionAdres
-            // 
-            this.textBoxTransactionAdres.Location = new System.Drawing.Point(6, 79);
-            this.textBoxTransactionAdres.Name = "textBoxTransactionAdres";
-            this.textBoxTransactionAdres.Size = new System.Drawing.Size(188, 20);
-            this.textBoxTransactionAdres.TabIndex = 5;
             // 
             // groupBoxSlave
             // 
@@ -170,6 +169,7 @@
             this.buttonMasterDataSend.TabIndex = 2;
             this.buttonMasterDataSend.Text = "Wyślij";
             this.buttonMasterDataSend.UseVisualStyleBackColor = true;
+            this.buttonMasterDataSend.Click += new System.EventHandler(this.buttonMasterDataSend_Click);
             // 
             // comboBoxTimeLimit
             // 
@@ -300,25 +300,44 @@
             // 
             this.comboBoxPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxPort.FormattingEnabled = true;
-            this.comboBoxPort.Location = new System.Drawing.Point(194, 25);
+            this.comboBoxPort.Location = new System.Drawing.Point(178, 25);
             this.comboBoxPort.Name = "comboBoxPort";
-            this.comboBoxPort.Size = new System.Drawing.Size(154, 21);
+            this.comboBoxPort.Size = new System.Drawing.Size(64, 21);
             this.comboBoxPort.TabIndex = 4;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(191, 9);
+            this.label11.Location = new System.Drawing.Point(175, 9);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(26, 13);
             this.label11.TabIndex = 5;
             this.label11.Text = "Port";
+            // 
+            // numericUpDownTransactionAdres
+            // 
+            this.numericUpDownTransactionAdres.Location = new System.Drawing.Point(6, 79);
+            this.numericUpDownTransactionAdres.Name = "numericUpDownTransactionAdres";
+            this.numericUpDownTransactionAdres.Size = new System.Drawing.Size(118, 20);
+            this.numericUpDownTransactionAdres.TabIndex = 6;
+            this.numericUpDownTransactionAdres.ValueChanged += new System.EventHandler(this.numericUpDownTransactionAdres_ValueChanged);
+            // 
+            // buttonConnect
+            // 
+            this.buttonConnect.Location = new System.Drawing.Point(265, 16);
+            this.buttonConnect.Name = "buttonConnect";
+            this.buttonConnect.Size = new System.Drawing.Size(117, 37);
+            this.buttonConnect.TabIndex = 6;
+            this.buttonConnect.Text = "Połącz";
+            this.buttonConnect.UseVisualStyleBackColor = true;
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.groupBoxSlave);
@@ -327,6 +346,7 @@
             this.Controls.Add(this.comboBoxProtocole);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxMaster.ResumeLayout(false);
             this.groupBoxMaster.PerformLayout();
@@ -334,6 +354,7 @@
             this.groupBox2.PerformLayout();
             this.groupBoxFrame.ResumeLayout(false);
             this.groupBoxFrame.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -343,10 +364,9 @@
 
         private System.Windows.Forms.ComboBox comboBoxProtocole;
         private System.Windows.Forms.Label label1;
-        private System.IO.Ports.SerialPort serialPort1;
+        private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.GroupBox groupBoxMaster;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBoxTransactionAdres;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxTransaction;
         private System.Windows.Forms.GroupBox groupBoxSlave;
@@ -368,6 +388,8 @@
         private System.Windows.Forms.RichTextBox richTextBoxMasterSendMsg;
         private System.Windows.Forms.ComboBox comboBoxPort;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown numericUpDownTransactionAdres;
+        private System.Windows.Forms.Button buttonConnect;
     }
 }
 

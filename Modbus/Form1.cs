@@ -15,6 +15,8 @@ namespace Modbus
     {
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
+        string frame;
+
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace Modbus
             comboBoxTransaction.Items.Add(addressTransaction);
             comboBoxOrderCode.Items.Add(1);
             comboBoxOrderCode.Items.Add(2);
+            numericUpDownTransactionAdres.Maximum = 247;
+            numericUpDownTransactionAdres.Minimum = 1;
 
             //odczytanie dostępnych portów wraz z wpisanie ich do rozwijanej listy
             comboBoxPort.Items.AddRange(SerialPort.GetPortNames());
@@ -55,19 +59,90 @@ namespace Modbus
             //sortowanie
             comboBoxPort.Sorted = true;
 
-            //Blokada nieużywanych grup
+            //Blokada nieużywanych elementów
             groupBoxMaster.Enabled = false;
             groupBoxSlave.Enabled = false;
+            buttonConnect.Enabled = false;
 
             //aktywacja lub dezaktywacja kontrolek
             comboBoxProtocole.Enabled = true;
             comboBoxTransaction.Enabled = true;
-            textBoxTransactionAdres.Enabled = false;
+            numericUpDownTransactionAdres.Enabled = false;
         }
 
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxProtocole.Text == "Master")
+            //Wybór stacji Mster lub Slave
+            if (comboBoxProtocole.Text != "" && comboBoxPort.Text != "")
+                buttonConnect.Enabled = true;
+
+        }
+
+        private void comboBoxTransaction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //kontrola poprawności danych
+            if (comboBoxTransaction.Text == broadcastTransaction)
+            {
+                numericUpDownTransactionAdres.Enabled = false;
+                comboBoxOrderCode.SelectedIndex = 0;
+            }
+            else
+                numericUpDownTransactionAdres.Enabled = true;
+        }
+
+        private void comboBoxOrderCode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //kontrola poprawności danych
+            if (comboBoxOrderCode.Text=="2" && comboBoxTransaction.Text == broadcastTransaction)
+            {
+                comboBoxOrderCode.SelectedIndex = 0;
+            }
+        }
+
+        private void numericUpDownTransactionAdres_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //zamykanie portu po wyłączeniu programu
+            if (serialPort.IsOpen)      
+                serialPort.Close();
+        }
+
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            string data = serialPort.ReadExisting();
+        }
+
+        public static byte calculateLRC(byte[] bytes)
+        {
+            byte LRC = 0;
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                LRC ^= bytes[i];
+            }
+            return LRC;
+        }
+
+        private void buttonMasterDataSend_Click(object sender, EventArgs e)
+        {
+            //Tworzenie ramki z wybranych danych
+            char sof = ':';
+            char[] adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
+            char[] rozkaz = comboBoxOrderCode.Text.ToCharArray();
+            char[] msg = richTextBoxMasterSendMsg.Text.ToCharArray();
+            char[] lrc = calculateLRC(Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
+            char[] endMaker = "/r/n".ToCharArray();
+
+            string frame = sof.ToString() + adres.ToString() + rozkaz.ToString() + msg.ToString() + lrc.ToString() + endMaker.ToString(); ;
+
+        }
+
+        private void buttonConnect_Click(object sender, EventArgs e)
+        {
+            if(comboBoxProtocole.Text == "Master")
             {
                 groupBoxMaster.Enabled = true;
                 groupBoxSlave.Enabled = false;
@@ -78,24 +153,15 @@ namespace Modbus
                 groupBoxSlave.Enabled = true;
             }
 
-        }
-
-        private void comboBoxTransaction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxTransaction.Text == broadcastTransaction)
+            try
             {
-                textBoxTransactionAdres.Enabled = false;
-                comboBoxOrderCode.SelectedIndex = 0;
+                serialPort.PortName = comboBoxPort.Text;                                    //ustawianie portu
+                serialPort.Open();
+
             }
-            else
-                textBoxTransactionAdres.Enabled = true;
-        }
-
-        private void comboBoxOrderCode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxOrderCode.Text=="2" && comboBoxTransaction.Text == broadcastTransaction)
+            catch (Exception ex)
             {
-                comboBoxOrderCode.SelectedIndex = 0;
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
