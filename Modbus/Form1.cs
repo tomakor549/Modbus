@@ -24,7 +24,7 @@ namespace Modbus
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Uzupełnianie comboBox (list rozwijanych) o dane
+            //Uzupełnianie komponentów o dane
             comboBoxProtocole.Items.Add("Master");
             comboBoxProtocole.Items.Add("Slave");
             comboBoxTransaction.Items.Add(broadcastTransaction);
@@ -34,10 +34,15 @@ namespace Modbus
             numericUpDownTransactionAdres.Maximum = 247;
             numericUpDownTransactionAdres.Minimum = 1;
 
+            //ograniczenie textboxa wysyłającego dane
+            richTextBoxMasterSendMsg.MaxLength = 252;
+
             //odczytanie dostępnych portów wraz z wpisanie ich do rozwijanej listy
             comboBoxPort.Items.AddRange(SerialPort.GetPortNames());
 
-            for (int i = 0; i <= 10000; i = i + 100)
+            comboBoxFrameCharSpace.Items.Add(0);
+
+            for (int i = 100; i <= 10000; i = i + 100)
             {
                 comboBoxTimeLimit.Items.Add(i);
                 comboBoxFrameCharSpace.Items.Add(i / 10);
@@ -59,22 +64,33 @@ namespace Modbus
             //sortowanie
             comboBoxPort.Sorted = true;
 
-            //Blokada nieużywanych elementów
-            groupBoxMaster.Enabled = false;
-            groupBoxSlave.Enabled = false;
-            buttonConnect.Enabled = false;
-
             //aktywacja lub dezaktywacja kontrolek
             comboBoxProtocole.Enabled = true;
             comboBoxTransaction.Enabled = true;
             numericUpDownTransactionAdres.Enabled = false;
+            groupBoxMaster.Enabled = false;
+            groupBoxSlave.Enabled = false;
+            buttonMasterConnect.Enabled = true;
+            buttonMasterDataSend.Enabled = false;
+            buttonMasterDisconnect.Enabled = false;
+
+            //zmiana ustawień kontrolek
+            richTextBoxMasterReceivedMsg.ReadOnly = true;
         }
 
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Wybór stacji Mster lub Slave
-            if (comboBoxProtocole.Text != "" && comboBoxPort.Text != "")
-                buttonConnect.Enabled = true;
+            if (comboBoxProtocole.Text == "Master" && comboBoxPort.Text != "")
+            {
+                groupBoxMaster.Enabled = true;
+                groupBoxSlave.Enabled = false;
+            }
+            else
+            {
+                groupBoxMaster.Enabled = false;
+                groupBoxSlave.Enabled = true;
+            }
 
         }
 
@@ -129,20 +145,41 @@ namespace Modbus
         private void buttonMasterDataSend_Click(object sender, EventArgs e)
         {
             //Tworzenie ramki z wybranych danych
-            char sof = ':';
+            //wysyłamy to gówno po znaku z ograniczeniem czasowym, stąd chary
+            char[] sof = { ':' };
             char[] adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
             char[] rozkaz = comboBoxOrderCode.Text.ToCharArray();
             char[] msg = richTextBoxMasterSendMsg.Text.ToCharArray();
             char[] lrc = calculateLRC(Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
             char[] endMaker = "/r/n".ToCharArray();
 
-            string frame = sof.ToString() + adres.ToString() + rozkaz.ToString() + msg.ToString() + lrc.ToString() + endMaker.ToString(); ;
-
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if(comboBoxProtocole.Text == "Master")
+            try
+            {   //ustawianie portu - wymaga wielu zmian
+                serialPort.PortName = comboBoxPort.Text;
+                //ograniczenie czasowe wysłania danych
+                serialPort.ReadTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);  //albo WriteTimeout, nie wiem które
+
+                serialPort.Open();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            buttonMasterDataSend.Enabled = true;
+            buttonMasterConnect.Enabled = false;
+            buttonMasterDisconnect.Enabled = true;
+        }
+
+        private void comboBoxPort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Wybór stacji Master lub Slave
+            if (comboBoxProtocole.Text == "Master" && comboBoxPort.Text != "")
             {
                 groupBoxMaster.Enabled = true;
                 groupBoxSlave.Enabled = false;
@@ -152,17 +189,22 @@ namespace Modbus
                 groupBoxMaster.Enabled = false;
                 groupBoxSlave.Enabled = true;
             }
+        }
 
+        private void buttonMasterDisconnected_Click(object sender, EventArgs e)
+        {
             try
             {
-                serialPort.PortName = comboBoxPort.Text;                                    //ustawianie portu
-                serialPort.Open();
-
+                serialPort.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            buttonMasterDisconnect.Enabled = false;
+            buttonMasterConnect.Enabled = true;
+            buttonMasterDataSend.Enabled = false;
         }
     }
 }

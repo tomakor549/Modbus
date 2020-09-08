@@ -33,34 +33,37 @@
             this.label1 = new System.Windows.Forms.Label();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBoxMaster = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.comboBoxTransaction = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.groupBoxSlave = new System.Windows.Forms.GroupBox();
-            this.groupBoxFrame = new System.Windows.Forms.GroupBox();
-            this.buttonMasterDataSend = new System.Windows.Forms.Button();
-            this.comboBoxTimeLimit = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBoxRetransAdres = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboBoxFrameCharSpace = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.comboBoxOrderCode = new System.Windows.Forms.ComboBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.richTextBoxMasterSendMsg = new System.Windows.Forms.RichTextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.richTextBoxMasterReceivedMsg = new System.Windows.Forms.RichTextBox();
+            this.buttonMasterConnect = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
+            this.richTextBoxMasterReceivedMsg = new System.Windows.Forms.RichTextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxFrameCharSpace = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.buttonMasterDataSend = new System.Windows.Forms.Button();
+            this.comboBoxRetransAdres = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxTimeLimit = new System.Windows.Forms.ComboBox();
+            this.groupBoxFrame = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.richTextBoxMasterSendMsg = new System.Windows.Forms.RichTextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.comboBoxOrderCode = new System.Windows.Forms.ComboBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numericUpDownTransactionAdres = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBoxTransaction = new System.Windows.Forms.ComboBox();
+            this.groupBoxSlave = new System.Windows.Forms.GroupBox();
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.numericUpDownTransactionAdres = new System.Windows.Forms.NumericUpDown();
-            this.buttonConnect = new System.Windows.Forms.Button();
+            this.buttonMasterDisconnect = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBoxMaster.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxProtocole
@@ -88,17 +91,12 @@
             // 
             // groupBoxMaster
             // 
+            this.groupBoxMaster.Controls.Add(this.groupBox1);
+            this.groupBoxMaster.Controls.Add(this.buttonMasterDisconnect);
+            this.groupBoxMaster.Controls.Add(this.buttonMasterConnect);
             this.groupBoxMaster.Controls.Add(this.label10);
             this.groupBoxMaster.Controls.Add(this.richTextBoxMasterReceivedMsg);
-            this.groupBoxMaster.Controls.Add(this.label7);
-            this.groupBoxMaster.Controls.Add(this.comboBoxFrameCharSpace);
-            this.groupBoxMaster.Controls.Add(this.label6);
-            this.groupBoxMaster.Controls.Add(this.label5);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDataSend);
-            this.groupBoxMaster.Controls.Add(this.comboBoxRetransAdres);
-            this.groupBoxMaster.Controls.Add(this.label4);
-            this.groupBoxMaster.Controls.Add(this.label3);
-            this.groupBoxMaster.Controls.Add(this.comboBoxTimeLimit);
             this.groupBoxMaster.Controls.Add(this.groupBoxFrame);
             this.groupBoxMaster.Controls.Add(this.groupBox2);
             this.groupBoxMaster.Location = new System.Drawing.Point(15, 68);
@@ -108,45 +106,114 @@
             this.groupBoxMaster.TabStop = false;
             this.groupBoxMaster.Text = "Master";
             // 
-            // groupBox2
+            // buttonMasterConnect
             // 
-            this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.comboBoxTransaction);
-            this.groupBox2.Location = new System.Drawing.Point(6, 19);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 123);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Transakcja";
+            this.buttonMasterConnect.Location = new System.Drawing.Point(201, 168);
+            this.buttonMasterConnect.Name = "buttonMasterConnect";
+            this.buttonMasterConnect.Size = new System.Drawing.Size(78, 76);
+            this.buttonMasterConnect.TabIndex = 6;
+            this.buttonMasterConnect.Text = "Połącz";
+            this.buttonMasterConnect.UseVisualStyleBackColor = true;
+            this.buttonMasterConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
-            // comboBoxTransaction
+            // label10
             // 
-            this.comboBoxTransaction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTransaction.FormattingEnabled = true;
-            this.comboBoxTransaction.Location = new System.Drawing.Point(6, 29);
-            this.comboBoxTransaction.Name = "comboBoxTransaction";
-            this.comboBoxTransaction.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxTransaction.TabIndex = 3;
-            this.comboBoxTransaction.SelectedIndexChanged += new System.EventHandler(this.comboBoxTransaction_SelectedIndexChanged);
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(18, 286);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(81, 13);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "Tekst odebrany";
             // 
-            // label2
+            // richTextBoxMasterReceivedMsg
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 63);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Adres";
+            this.richTextBoxMasterReceivedMsg.Location = new System.Drawing.Point(12, 302);
+            this.richTextBoxMasterReceivedMsg.Name = "richTextBoxMasterReceivedMsg";
+            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(347, 68);
+            this.richTextBoxMasterReceivedMsg.TabIndex = 9;
+            this.richTextBoxMasterReceivedMsg.Text = "";
             // 
-            // groupBoxSlave
+            // label7
             // 
-            this.groupBoxSlave.Location = new System.Drawing.Point(471, 68);
-            this.groupBoxSlave.Name = "groupBoxSlave";
-            this.groupBoxSlave.Size = new System.Drawing.Size(200, 100);
-            this.groupBoxSlave.TabIndex = 3;
-            this.groupBoxSlave.TabStop = false;
-            this.groupBoxSlave.Text = "Slave";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(133, 74);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(20, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "ms";
+            // 
+            // comboBoxFrameCharSpace
+            // 
+            this.comboBoxFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFrameCharSpace.FormattingEnabled = true;
+            this.comboBoxFrameCharSpace.Location = new System.Drawing.Point(9, 71);
+            this.comboBoxFrameCharSpace.Name = "comboBoxFrameCharSpace";
+            this.comboBoxFrameCharSpace.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxFrameCharSpace.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 56);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(158, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Odstęp pomiędzy znakami ramki";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 95);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Liczba retransmisji";
+            // 
+            // buttonMasterDataSend
+            // 
+            this.buttonMasterDataSend.Location = new System.Drawing.Point(201, 247);
+            this.buttonMasterDataSend.Name = "buttonMasterDataSend";
+            this.buttonMasterDataSend.Size = new System.Drawing.Size(166, 34);
+            this.buttonMasterDataSend.TabIndex = 2;
+            this.buttonMasterDataSend.Text = "Wyślij";
+            this.buttonMasterDataSend.UseVisualStyleBackColor = true;
+            this.buttonMasterDataSend.Click += new System.EventHandler(this.buttonMasterDataSend_Click);
+            // 
+            // comboBoxRetransAdres
+            // 
+            this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRetransAdres.FormattingEnabled = true;
+            this.comboBoxRetransAdres.Location = new System.Drawing.Point(9, 111);
+            this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
+            this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
+            this.comboBoxRetransAdres.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(133, 35);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(20, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "ms";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(115, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Ograniczenie Czasowe";
+            // 
+            // comboBoxTimeLimit
+            // 
+            this.comboBoxTimeLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTimeLimit.FormattingEnabled = true;
+            this.comboBoxTimeLimit.Location = new System.Drawing.Point(9, 32);
+            this.comboBoxTimeLimit.Name = "comboBoxTimeLimit";
+            this.comboBoxTimeLimit.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxTimeLimit.TabIndex = 6;
             // 
             // groupBoxFrame
             // 
@@ -154,94 +221,38 @@
             this.groupBoxFrame.Controls.Add(this.richTextBoxMasterSendMsg);
             this.groupBoxFrame.Controls.Add(this.label8);
             this.groupBoxFrame.Controls.Add(this.comboBoxOrderCode);
-            this.groupBoxFrame.Location = new System.Drawing.Point(12, 148);
+            this.groupBoxFrame.Location = new System.Drawing.Point(12, 168);
             this.groupBoxFrame.Name = "groupBoxFrame";
-            this.groupBoxFrame.Size = new System.Drawing.Size(194, 133);
+            this.groupBoxFrame.Size = new System.Drawing.Size(183, 113);
             this.groupBoxFrame.TabIndex = 1;
             this.groupBoxFrame.TabStop = false;
             this.groupBoxFrame.Text = "Utwórz ramkę";
             // 
-            // buttonMasterDataSend
+            // label9
             // 
-            this.buttonMasterDataSend.Location = new System.Drawing.Point(212, 148);
-            this.buttonMasterDataSend.Name = "buttonMasterDataSend";
-            this.buttonMasterDataSend.Size = new System.Drawing.Size(155, 133);
-            this.buttonMasterDataSend.TabIndex = 2;
-            this.buttonMasterDataSend.Text = "Wyślij";
-            this.buttonMasterDataSend.UseVisualStyleBackColor = true;
-            this.buttonMasterDataSend.Click += new System.EventHandler(this.buttonMasterDataSend_Click);
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 63);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(94, 13);
+            this.label9.TabIndex = 8;
+            this.label9.Text = "Tekst do wysłania";
             // 
-            // comboBoxTimeLimit
+            // richTextBoxMasterSendMsg
             // 
-            this.comboBoxTimeLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTimeLimit.FormattingEnabled = true;
-            this.comboBoxTimeLimit.Location = new System.Drawing.Point(215, 35);
-            this.comboBoxTimeLimit.Name = "comboBoxTimeLimit";
-            this.comboBoxTimeLimit.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxTimeLimit.TabIndex = 6;
+            this.richTextBoxMasterSendMsg.Location = new System.Drawing.Point(6, 79);
+            this.richTextBoxMasterSendMsg.Name = "richTextBoxMasterSendMsg";
+            this.richTextBoxMasterSendMsg.Size = new System.Drawing.Size(168, 28);
+            this.richTextBoxMasterSendMsg.TabIndex = 7;
+            this.richTextBoxMasterSendMsg.Text = "";
             // 
-            // label3
+            // label8
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(212, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(115, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Ograniczenie Czasowe";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(339, 38);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(20, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "ms";
-            // 
-            // comboBoxRetransAdres
-            // 
-            this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxRetransAdres.FormattingEnabled = true;
-            this.comboBoxRetransAdres.Location = new System.Drawing.Point(215, 114);
-            this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
-            this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
-            this.comboBoxRetransAdres.TabIndex = 9;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(212, 98);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Liczba retransmisji";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(212, 59);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(158, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Odstęp pomiędzy znakami ramki";
-            // 
-            // comboBoxFrameCharSpace
-            // 
-            this.comboBoxFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFrameCharSpace.FormattingEnabled = true;
-            this.comboBoxFrameCharSpace.Location = new System.Drawing.Point(215, 74);
-            this.comboBoxFrameCharSpace.Name = "comboBoxFrameCharSpace";
-            this.comboBoxFrameCharSpace.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxFrameCharSpace.TabIndex = 12;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(339, 77);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(20, 13);
-            this.label7.TabIndex = 13;
-            this.label7.Text = "ms";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 22);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(66, 13);
+            this.label8.TabIndex = 6;
+            this.label8.Text = "Kod rozkazu";
             // 
             // comboBoxOrderCode
             // 
@@ -253,48 +264,53 @@
             this.comboBoxOrderCode.TabIndex = 4;
             this.comboBoxOrderCode.SelectedIndexChanged += new System.EventHandler(this.comboBoxOrderCode_SelectedIndexChanged);
             // 
-            // label8
+            // groupBox2
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 22);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(66, 13);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "Kod rozkazu";
+            this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.comboBoxTransaction);
+            this.groupBox2.Location = new System.Drawing.Point(6, 19);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(189, 143);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Transakcja";
             // 
-            // richTextBoxMasterSendMsg
+            // numericUpDownTransactionAdres
             // 
-            this.richTextBoxMasterSendMsg.Location = new System.Drawing.Point(6, 79);
-            this.richTextBoxMasterSendMsg.Name = "richTextBoxMasterSendMsg";
-            this.richTextBoxMasterSendMsg.Size = new System.Drawing.Size(181, 48);
-            this.richTextBoxMasterSendMsg.TabIndex = 7;
-            this.richTextBoxMasterSendMsg.Text = "";
+            this.numericUpDownTransactionAdres.Location = new System.Drawing.Point(6, 79);
+            this.numericUpDownTransactionAdres.Name = "numericUpDownTransactionAdres";
+            this.numericUpDownTransactionAdres.Size = new System.Drawing.Size(118, 20);
+            this.numericUpDownTransactionAdres.TabIndex = 6;
+            this.numericUpDownTransactionAdres.ValueChanged += new System.EventHandler(this.numericUpDownTransactionAdres_ValueChanged);
             // 
-            // label9
+            // label2
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(6, 63);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(94, 13);
-            this.label9.TabIndex = 8;
-            this.label9.Text = "Tekst do wysłania";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 63);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Adres";
             // 
-            // richTextBoxMasterReceivedMsg
+            // comboBoxTransaction
             // 
-            this.richTextBoxMasterReceivedMsg.Location = new System.Drawing.Point(12, 302);
-            this.richTextBoxMasterReceivedMsg.Name = "richTextBoxMasterReceivedMsg";
-            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(347, 68);
-            this.richTextBoxMasterReceivedMsg.TabIndex = 9;
-            this.richTextBoxMasterReceivedMsg.Text = "";
+            this.comboBoxTransaction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTransaction.FormattingEnabled = true;
+            this.comboBoxTransaction.Location = new System.Drawing.Point(6, 29);
+            this.comboBoxTransaction.Name = "comboBoxTransaction";
+            this.comboBoxTransaction.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxTransaction.TabIndex = 3;
+            this.comboBoxTransaction.SelectedIndexChanged += new System.EventHandler(this.comboBoxTransaction_SelectedIndexChanged);
             // 
-            // label10
+            // groupBoxSlave
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(18, 286);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(81, 13);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Tekst odebrany";
+            this.groupBoxSlave.Location = new System.Drawing.Point(471, 68);
+            this.groupBoxSlave.Name = "groupBoxSlave";
+            this.groupBoxSlave.Size = new System.Drawing.Size(200, 100);
+            this.groupBoxSlave.TabIndex = 3;
+            this.groupBoxSlave.TabStop = false;
+            this.groupBoxSlave.Text = "Slave";
             // 
             // comboBoxPort
             // 
@@ -304,6 +320,7 @@
             this.comboBoxPort.Name = "comboBoxPort";
             this.comboBoxPort.Size = new System.Drawing.Size(64, 21);
             this.comboBoxPort.TabIndex = 4;
+            this.comboBoxPort.SelectedIndexChanged += new System.EventHandler(this.comboBoxPort_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -314,30 +331,38 @@
             this.label11.TabIndex = 5;
             this.label11.Text = "Port";
             // 
-            // numericUpDownTransactionAdres
+            // buttonMasterDisconnect
             // 
-            this.numericUpDownTransactionAdres.Location = new System.Drawing.Point(6, 79);
-            this.numericUpDownTransactionAdres.Name = "numericUpDownTransactionAdres";
-            this.numericUpDownTransactionAdres.Size = new System.Drawing.Size(118, 20);
-            this.numericUpDownTransactionAdres.TabIndex = 6;
-            this.numericUpDownTransactionAdres.ValueChanged += new System.EventHandler(this.numericUpDownTransactionAdres_ValueChanged);
+            this.buttonMasterDisconnect.Location = new System.Drawing.Point(285, 168);
+            this.buttonMasterDisconnect.Name = "buttonMasterDisconnect";
+            this.buttonMasterDisconnect.Size = new System.Drawing.Size(82, 76);
+            this.buttonMasterDisconnect.TabIndex = 14;
+            this.buttonMasterDisconnect.Text = "Rozłącz";
+            this.buttonMasterDisconnect.UseVisualStyleBackColor = true;
+            this.buttonMasterDisconnect.Click += new System.EventHandler(this.buttonMasterDisconnected_Click);
             // 
-            // buttonConnect
+            // groupBox1
             // 
-            this.buttonConnect.Location = new System.Drawing.Point(265, 16);
-            this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(117, 37);
-            this.buttonConnect.TabIndex = 6;
-            this.buttonConnect.Text = "Połącz";
-            this.buttonConnect.UseVisualStyleBackColor = true;
-            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.comboBoxRetransAdres);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.comboBoxFrameCharSpace);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Location = new System.Drawing.Point(201, 19);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(166, 143);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Kontrola";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.buttonConnect);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.groupBoxSlave);
@@ -350,11 +375,13 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxMaster.ResumeLayout(false);
             this.groupBoxMaster.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBoxFrame.ResumeLayout(false);
             this.groupBoxFrame.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -389,7 +416,9 @@
         private System.Windows.Forms.ComboBox comboBoxPort;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numericUpDownTransactionAdres;
-        private System.Windows.Forms.Button buttonConnect;
+        private System.Windows.Forms.Button buttonMasterConnect;
+        private System.Windows.Forms.Button buttonMasterDisconnect;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
