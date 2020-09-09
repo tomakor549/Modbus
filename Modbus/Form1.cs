@@ -9,17 +9,50 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//zmienić lrc
+
+
+
 namespace Modbus
 {
+    struct Frame
+    {
+        public char[] sof;
+        public char[] adres;
+        public char[] command;
+        public char[] msg;
+        public char[] lrc;
+        public char[] endMaker;
+
+        public Frame(char[] sof, char[] endMaker)
+        {
+            this.sof = sof;
+            this.endMaker = endMaker;
+            this.adres = null;
+            this.command = null;
+            this.msg = null;
+            this.lrc = null;
+        }
+
+        public void clearData()
+        {
+            this.adres = null;
+            this.command = null;
+            this.msg = null;
+            this.lrc = null;
+        }
+    }
+
     public partial class Form1 : Form
     {
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
-        string frame;
+        Frame frame;
 
         public Form1()
         {
             InitializeComponent();
+            frame = new Frame(":".ToCharArray(), "/r/n".ToCharArray());
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -31,7 +64,8 @@ namespace Modbus
             comboBoxTransaction.Items.Add(addressTransaction);
             comboBoxOrderCode.Items.Add(1);
             comboBoxOrderCode.Items.Add(2);
-            numericUpDownTransactionAdres.Maximum = 247;
+            //SerialPort.WriteBufferSize na start ma 2048 bitów (Właściwość ignoruje wszelkie wartości mniejsze niż 2048 czyli 256 B)
+            numericUpDownTransactionAdres.Maximum = 247;    //stąd, aby się nie przemęczać ograniczamy maksymalną ilość danych do posłania
             numericUpDownTransactionAdres.Minimum = 1;
 
             //ograniczenie textboxa wysyłającego dane
@@ -76,6 +110,13 @@ namespace Modbus
 
             //zmiana ustawień kontrolek
             richTextBoxMasterReceivedMsg.ReadOnly = true;
+
+            //ustawienia serialPort
+            //kodowanie w ASCII
+            serialPort.Encoding = Encoding.ASCII;
+            //kontrola znaku
+            serialPort.Parity = System.IO.Ports.Parity.None;
+            serialPort.StopBits = System.IO.Ports.StopBits.One;
         }
 
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
@@ -134,6 +175,7 @@ namespace Modbus
 
         public static byte calculateLRC(byte[] bytes)
         {
+            //Do poprawy
             byte LRC = 0;
             for (int i = 0; i < bytes.Length; i++)
             {
@@ -146,12 +188,10 @@ namespace Modbus
         {
             //Tworzenie ramki z wybranych danych
             //wysyłamy to gówno po znaku z ograniczeniem czasowym, stąd chary
-            char[] sof = { ':' };
-            char[] adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
-            char[] rozkaz = comboBoxOrderCode.Text.ToCharArray();
-            char[] msg = richTextBoxMasterSendMsg.Text.ToCharArray();
-            char[] lrc = calculateLRC(Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
-            char[] endMaker = "/r/n".ToCharArray();
+            frame.adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
+            frame.command = comboBoxOrderCode.Text.ToCharArray();
+            frame.msg = richTextBoxMasterSendMsg.Text.ToCharArray();
+            frame.lrc = calculateLRC(Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
 
         }
 
@@ -161,7 +201,7 @@ namespace Modbus
             {   //ustawianie portu - wymaga wielu zmian
                 serialPort.PortName = comboBoxPort.Text;
                 //ograniczenie czasowe wysłania danych
-                serialPort.ReadTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);  //albo WriteTimeout, nie wiem które
+                serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
 
                 serialPort.Open();
 
@@ -205,6 +245,36 @@ namespace Modbus
             buttonMasterDisconnect.Enabled = false;
             buttonMasterConnect.Enabled = true;
             buttonMasterDataSend.Enabled = false;
+        }
+
+        private void sendData()
+        {
+
+        }
+
+        private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+           
+        }
+
+        private void richTextBoxMasterReceivedMsg_TextChanged(object sender, EventArgs e)
+        {
+            string data = serialPort.ReadExisting();
+
+            //sprawdzenie czy komponent gdzie wypisywane są odebrane dane jest w tym samym wątku co odbiór danych
+            if (richTextBoxMasterReceivedMsg.InvokeRequired)
+            {
+                //utworzenie delegata (wskaźnika do mikro funkcji) metody do wpisywania danych w komponencie z bufora odbioru danych
+                Action act = () => richTextBoxMasterReceivedMsg.Text += data;
+
+                //wykonanie delegata dla wątku głównego
+                Invoke(act);   //wywołanie delegata
+            }
+            else
+            {
+                //jeżeli jest w tym samym wątku przepisz normalnie dane z bufora do komponentu
+                richTextBoxMasterReceivedMsg.Text += data;
+            }
         }
     }
 }

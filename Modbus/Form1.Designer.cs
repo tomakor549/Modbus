@@ -33,18 +33,20 @@
             this.label1 = new System.Windows.Forms.Label();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBoxMaster = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.comboBoxTimeLimit = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBoxRetransAdres = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.comboBoxFrameCharSpace = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.buttonMasterDisconnect = new System.Windows.Forms.Button();
             this.buttonMasterConnect = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.richTextBoxMasterReceivedMsg = new System.Windows.Forms.RichTextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.comboBoxFrameCharSpace = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.buttonMasterDataSend = new System.Windows.Forms.Button();
-            this.comboBoxRetransAdres = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.comboBoxTimeLimit = new System.Windows.Forms.ComboBox();
             this.groupBoxFrame = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
             this.richTextBoxMasterSendMsg = new System.Windows.Forms.RichTextBox();
@@ -57,13 +59,11 @@
             this.groupBoxSlave = new System.Windows.Forms.GroupBox();
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.buttonMasterDisconnect = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBoxMaster.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxProtocole
@@ -87,13 +87,17 @@
             // 
             // serialPort
             // 
+            this.serialPort.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(this.serialPort_ErrorReceived);
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // groupBoxMaster
             // 
             this.groupBoxMaster.Controls.Add(this.groupBox1);
+            this.groupBoxMaster.Controls.Add(this.label7);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDisconnect);
             this.groupBoxMaster.Controls.Add(this.buttonMasterConnect);
+            this.groupBoxMaster.Controls.Add(this.comboBoxFrameCharSpace);
+            this.groupBoxMaster.Controls.Add(this.label6);
             this.groupBoxMaster.Controls.Add(this.label10);
             this.groupBoxMaster.Controls.Add(this.richTextBoxMasterReceivedMsg);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDataSend);
@@ -106,9 +110,105 @@
             this.groupBoxMaster.TabStop = false;
             this.groupBoxMaster.Text = "Master";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.comboBoxRetransAdres);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Location = new System.Drawing.Point(201, 19);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(166, 143);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Kontrola";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 29);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(115, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Ograniczenie Czasowe";
+            // 
+            // comboBoxTimeLimit
+            // 
+            this.comboBoxTimeLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTimeLimit.FormattingEnabled = true;
+            this.comboBoxTimeLimit.Location = new System.Drawing.Point(9, 45);
+            this.comboBoxTimeLimit.Name = "comboBoxTimeLimit";
+            this.comboBoxTimeLimit.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxTimeLimit.TabIndex = 6;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(133, 48);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(20, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "ms";
+            // 
+            // comboBoxRetransAdres
+            // 
+            this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRetransAdres.FormattingEnabled = true;
+            this.comboBoxRetransAdres.Location = new System.Drawing.Point(9, 99);
+            this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
+            this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
+            this.comboBoxRetransAdres.TabIndex = 9;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(343, 320);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(20, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "ms";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 83);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Liczba retransmisji";
+            // 
+            // comboBoxFrameCharSpace
+            // 
+            this.comboBoxFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFrameCharSpace.FormattingEnabled = true;
+            this.comboBoxFrameCharSpace.Location = new System.Drawing.Point(219, 317);
+            this.comboBoxFrameCharSpace.Name = "comboBoxFrameCharSpace";
+            this.comboBoxFrameCharSpace.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxFrameCharSpace.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(216, 302);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(158, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Odstęp pomiędzy znakami ramki";
+            // 
+            // buttonMasterDisconnect
+            // 
+            this.buttonMasterDisconnect.Location = new System.Drawing.Point(286, 165);
+            this.buttonMasterDisconnect.Name = "buttonMasterDisconnect";
+            this.buttonMasterDisconnect.Size = new System.Drawing.Size(82, 76);
+            this.buttonMasterDisconnect.TabIndex = 14;
+            this.buttonMasterDisconnect.Text = "Rozłącz";
+            this.buttonMasterDisconnect.UseVisualStyleBackColor = true;
+            this.buttonMasterDisconnect.Click += new System.EventHandler(this.buttonMasterDisconnected_Click);
+            // 
             // buttonMasterConnect
             // 
-            this.buttonMasterConnect.Location = new System.Drawing.Point(201, 168);
+            this.buttonMasterConnect.Location = new System.Drawing.Point(201, 165);
             this.buttonMasterConnect.Name = "buttonMasterConnect";
             this.buttonMasterConnect.Size = new System.Drawing.Size(78, 76);
             this.buttonMasterConnect.TabIndex = 6;
@@ -129,91 +229,20 @@
             // 
             this.richTextBoxMasterReceivedMsg.Location = new System.Drawing.Point(12, 302);
             this.richTextBoxMasterReceivedMsg.Name = "richTextBoxMasterReceivedMsg";
-            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(347, 68);
+            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(201, 68);
             this.richTextBoxMasterReceivedMsg.TabIndex = 9;
             this.richTextBoxMasterReceivedMsg.Text = "";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(133, 74);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(20, 13);
-            this.label7.TabIndex = 13;
-            this.label7.Text = "ms";
-            // 
-            // comboBoxFrameCharSpace
-            // 
-            this.comboBoxFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFrameCharSpace.FormattingEnabled = true;
-            this.comboBoxFrameCharSpace.Location = new System.Drawing.Point(9, 71);
-            this.comboBoxFrameCharSpace.Name = "comboBoxFrameCharSpace";
-            this.comboBoxFrameCharSpace.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxFrameCharSpace.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 56);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(158, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Odstęp pomiędzy znakami ramki";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 95);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Liczba retransmisji";
+            this.richTextBoxMasterReceivedMsg.TextChanged += new System.EventHandler(this.richTextBoxMasterReceivedMsg_TextChanged);
             // 
             // buttonMasterDataSend
             // 
-            this.buttonMasterDataSend.Location = new System.Drawing.Point(201, 247);
+            this.buttonMasterDataSend.Location = new System.Drawing.Point(202, 247);
             this.buttonMasterDataSend.Name = "buttonMasterDataSend";
             this.buttonMasterDataSend.Size = new System.Drawing.Size(166, 34);
             this.buttonMasterDataSend.TabIndex = 2;
             this.buttonMasterDataSend.Text = "Wyślij";
             this.buttonMasterDataSend.UseVisualStyleBackColor = true;
             this.buttonMasterDataSend.Click += new System.EventHandler(this.buttonMasterDataSend_Click);
-            // 
-            // comboBoxRetransAdres
-            // 
-            this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxRetransAdres.FormattingEnabled = true;
-            this.comboBoxRetransAdres.Location = new System.Drawing.Point(9, 111);
-            this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
-            this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
-            this.comboBoxRetransAdres.TabIndex = 9;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(133, 35);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(20, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "ms";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(115, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Ograniczenie Czasowe";
-            // 
-            // comboBoxTimeLimit
-            // 
-            this.comboBoxTimeLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTimeLimit.FormattingEnabled = true;
-            this.comboBoxTimeLimit.Location = new System.Drawing.Point(9, 32);
-            this.comboBoxTimeLimit.Name = "comboBoxTimeLimit";
-            this.comboBoxTimeLimit.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxTimeLimit.TabIndex = 6;
             // 
             // groupBoxFrame
             // 
@@ -331,33 +360,6 @@
             this.label11.TabIndex = 5;
             this.label11.Text = "Port";
             // 
-            // buttonMasterDisconnect
-            // 
-            this.buttonMasterDisconnect.Location = new System.Drawing.Point(285, 168);
-            this.buttonMasterDisconnect.Name = "buttonMasterDisconnect";
-            this.buttonMasterDisconnect.Size = new System.Drawing.Size(82, 76);
-            this.buttonMasterDisconnect.TabIndex = 14;
-            this.buttonMasterDisconnect.Text = "Rozłącz";
-            this.buttonMasterDisconnect.UseVisualStyleBackColor = true;
-            this.buttonMasterDisconnect.Click += new System.EventHandler(this.buttonMasterDisconnected_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.comboBoxRetransAdres);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.comboBoxFrameCharSpace);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(201, 19);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(166, 143);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Kontrola";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,13 +377,13 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBoxMaster.ResumeLayout(false);
             this.groupBoxMaster.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBoxFrame.ResumeLayout(false);
             this.groupBoxFrame.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
