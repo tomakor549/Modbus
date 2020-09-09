@@ -9,9 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//zmienić lrc
-
-
+/*
+ * Do zrobienia:
+1. zmienić lrc - uwzględnić adres, rozkaz i dane w przeliczaniu lrc
+2. wysyłanie i odbieranie danych na masterze
+3. Obsługę wewnętrzną slava
+4. W stacji MASTER i w stacji SLAVE należy umożliwić podgląd ramek wysłanej oraz
+odebranej w kodzie heksadecymalnym.
+*/
 
 namespace Modbus
 {
@@ -72,7 +77,7 @@ namespace Modbus
             richTextBoxMasterSendMsg.MaxLength = 252;
 
             //odczytanie dostępnych portów wraz z wpisanie ich do rozwijanej listy
-            comboBoxPort.Items.AddRange(SerialPort.GetPortNames());
+            comboBoxMasterPort.Items.AddRange(SerialPort.GetPortNames());
 
             comboBoxFrameCharSpace.Items.Add(0);
 
@@ -92,11 +97,11 @@ namespace Modbus
             comboBoxRetransAdres.SelectedIndex = 0;
             comboBoxFrameCharSpace.SelectedIndex = 0;
             comboBoxOrderCode.SelectedIndex = 0;
-            if (comboBoxPort.Items.Count > 0)
-                comboBoxPort.SelectedIndex = 0;
+            if (comboBoxMasterPort.Items.Count > 0)
+                comboBoxMasterPort.SelectedIndex = 0;
 
             //sortowanie
-            comboBoxPort.Sorted = true;
+            comboBoxMasterPort.Sorted = true;
 
             //aktywacja lub dezaktywacja kontrolek
             comboBoxProtocole.Enabled = true;
@@ -106,7 +111,8 @@ namespace Modbus
             groupBoxSlave.Enabled = false;
             buttonMasterConnect.Enabled = true;
             buttonMasterDataSend.Enabled = false;
-            buttonMasterDisconnect.Enabled = false;
+            buttonMasterDisconnect.Enabled = false; 
+            comboBoxMasterPort.Enabled = true;
 
             //zmiana ustawień kontrolek
             richTextBoxMasterReceivedMsg.ReadOnly = true;
@@ -122,7 +128,7 @@ namespace Modbus
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Wybór stacji Mster lub Slave
-            if (comboBoxProtocole.Text == "Master" && comboBoxPort.Text != "")
+            if (comboBoxProtocole.Text == "Master")
             {
                 groupBoxMaster.Enabled = true;
                 groupBoxSlave.Enabled = false;
@@ -199,7 +205,7 @@ namespace Modbus
         {
             try
             {   //ustawianie portu - wymaga wielu zmian
-                serialPort.PortName = comboBoxPort.Text;
+                serialPort.PortName = comboBoxMasterPort.Text;
                 //ograniczenie czasowe wysłania danych
                 serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
 
@@ -218,17 +224,7 @@ namespace Modbus
 
         private void comboBoxPort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Wybór stacji Master lub Slave
-            if (comboBoxProtocole.Text == "Master" && comboBoxPort.Text != "")
-            {
-                groupBoxMaster.Enabled = true;
-                groupBoxSlave.Enabled = false;
-            }
-            else
-            {
-                groupBoxMaster.Enabled = false;
-                groupBoxSlave.Enabled = true;
-            }
+
         }
 
         private void buttonMasterDisconnected_Click(object sender, EventArgs e)

@@ -57,13 +57,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxTransaction = new System.Windows.Forms.ComboBox();
             this.groupBoxSlave = new System.Windows.Forms.GroupBox();
-            this.comboBoxPort = new System.Windows.Forms.ComboBox();
+            this.comboBoxMasterPort = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.comboBoxSlavePort = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.groupBoxMaster.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).BeginInit();
+            this.groupBoxSlave.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxProtocole
@@ -92,8 +97,10 @@
             // 
             // groupBoxMaster
             // 
-            this.groupBoxMaster.Controls.Add(this.groupBox1);
+            this.groupBoxMaster.Controls.Add(this.label11);
+            this.groupBoxMaster.Controls.Add(this.comboBoxMasterPort);
             this.groupBoxMaster.Controls.Add(this.label7);
+            this.groupBoxMaster.Controls.Add(this.groupBox1);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDisconnect);
             this.groupBoxMaster.Controls.Add(this.buttonMasterConnect);
             this.groupBoxMaster.Controls.Add(this.comboBoxFrameCharSpace);
@@ -117,9 +124,9 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(201, 19);
+            this.groupBox1.Location = new System.Drawing.Point(12, 63);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(166, 143);
+            this.groupBox1.Size = new System.Drawing.Size(166, 99);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Kontrola";
@@ -127,7 +134,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 29);
+            this.label3.Location = new System.Drawing.Point(3, 13);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 7;
@@ -137,7 +144,7 @@
             // 
             this.comboBoxTimeLimit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTimeLimit.FormattingEnabled = true;
-            this.comboBoxTimeLimit.Location = new System.Drawing.Point(9, 45);
+            this.comboBoxTimeLimit.Location = new System.Drawing.Point(6, 29);
             this.comboBoxTimeLimit.Name = "comboBoxTimeLimit";
             this.comboBoxTimeLimit.Size = new System.Drawing.Size(118, 21);
             this.comboBoxTimeLimit.TabIndex = 6;
@@ -145,7 +152,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(133, 48);
+            this.label4.Location = new System.Drawing.Point(130, 32);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(20, 13);
             this.label4.TabIndex = 8;
@@ -155,7 +162,7 @@
             // 
             this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRetransAdres.FormattingEnabled = true;
-            this.comboBoxRetransAdres.Location = new System.Drawing.Point(9, 99);
+            this.comboBoxRetransAdres.Location = new System.Drawing.Point(6, 69);
             this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
             this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
             this.comboBoxRetransAdres.TabIndex = 9;
@@ -172,7 +179,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 83);
+            this.label5.Location = new System.Drawing.Point(3, 53);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(92, 13);
             this.label5.TabIndex = 10;
@@ -208,9 +215,9 @@
             // 
             // buttonMasterConnect
             // 
-            this.buttonMasterConnect.Location = new System.Drawing.Point(201, 165);
+            this.buttonMasterConnect.Location = new System.Drawing.Point(201, 168);
             this.buttonMasterConnect.Name = "buttonMasterConnect";
-            this.buttonMasterConnect.Size = new System.Drawing.Size(78, 76);
+            this.buttonMasterConnect.Size = new System.Drawing.Size(78, 73);
             this.buttonMasterConnect.TabIndex = 6;
             this.buttonMasterConnect.Text = "Połącz";
             this.buttonMasterConnect.UseVisualStyleBackColor = true;
@@ -298,9 +305,9 @@
             this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.comboBoxTransaction);
-            this.groupBox2.Location = new System.Drawing.Point(6, 19);
+            this.groupBox2.Location = new System.Drawing.Point(202, 19);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(189, 143);
+            this.groupBox2.Size = new System.Drawing.Size(172, 143);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Transakcja";
@@ -334,39 +341,76 @@
             // 
             // groupBoxSlave
             // 
-            this.groupBoxSlave.Location = new System.Drawing.Point(471, 68);
+            this.groupBoxSlave.Controls.Add(this.label13);
+            this.groupBoxSlave.Controls.Add(this.label12);
+            this.groupBoxSlave.Controls.Add(this.richTextBox1);
+            this.groupBoxSlave.Controls.Add(this.comboBoxSlavePort);
+            this.groupBoxSlave.Location = new System.Drawing.Point(395, 68);
             this.groupBoxSlave.Name = "groupBoxSlave";
-            this.groupBoxSlave.Size = new System.Drawing.Size(200, 100);
+            this.groupBoxSlave.Size = new System.Drawing.Size(384, 376);
             this.groupBoxSlave.TabIndex = 3;
             this.groupBoxSlave.TabStop = false;
             this.groupBoxSlave.Text = "Slave";
             // 
-            // comboBoxPort
+            // comboBoxMasterPort
             // 
-            this.comboBoxPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxPort.FormattingEnabled = true;
-            this.comboBoxPort.Location = new System.Drawing.Point(178, 25);
-            this.comboBoxPort.Name = "comboBoxPort";
-            this.comboBoxPort.Size = new System.Drawing.Size(64, 21);
-            this.comboBoxPort.TabIndex = 4;
-            this.comboBoxPort.SelectedIndexChanged += new System.EventHandler(this.comboBoxPort_SelectedIndexChanged);
+            this.comboBoxMasterPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMasterPort.FormattingEnabled = true;
+            this.comboBoxMasterPort.Location = new System.Drawing.Point(18, 35);
+            this.comboBoxMasterPort.Name = "comboBoxMasterPort";
+            this.comboBoxMasterPort.Size = new System.Drawing.Size(64, 21);
+            this.comboBoxMasterPort.TabIndex = 4;
+            this.comboBoxMasterPort.SelectedIndexChanged += new System.EventHandler(this.comboBoxPort_SelectedIndexChanged);
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(175, 9);
+            this.label11.Location = new System.Drawing.Point(15, 19);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(26, 13);
             this.label11.TabIndex = 5;
             this.label11.Text = "Port";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 19);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(26, 13);
+            this.label12.TabIndex = 16;
+            this.label12.Text = "Port";
+            // 
+            // comboBoxSlavePort
+            // 
+            this.comboBoxSlavePort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSlavePort.FormattingEnabled = true;
+            this.comboBoxSlavePort.Location = new System.Drawing.Point(6, 35);
+            this.comboBoxSlavePort.Name = "comboBoxSlavePort";
+            this.comboBoxSlavePort.Size = new System.Drawing.Size(64, 21);
+            this.comboBoxSlavePort.TabIndex = 15;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(45, 249);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(81, 13);
+            this.label13.TabIndex = 15;
+            this.label13.Text = "Tekst odebrany";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(39, 265);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(201, 68);
+            this.richTextBox1.TabIndex = 16;
+            this.richTextBox1.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.comboBoxPort);
             this.Controls.Add(this.groupBoxSlave);
             this.Controls.Add(this.groupBoxMaster);
             this.Controls.Add(this.label1);
@@ -384,6 +428,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).EndInit();
+            this.groupBoxSlave.ResumeLayout(false);
+            this.groupBoxSlave.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,12 +461,16 @@
         private System.Windows.Forms.RichTextBox richTextBoxMasterReceivedMsg;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RichTextBox richTextBoxMasterSendMsg;
-        private System.Windows.Forms.ComboBox comboBoxPort;
+        private System.Windows.Forms.ComboBox comboBoxMasterPort;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numericUpDownTransactionAdres;
         private System.Windows.Forms.Button buttonMasterConnect;
         private System.Windows.Forms.Button buttonMasterDisconnect;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ComboBox comboBoxSlavePort;
     }
 }
 
