@@ -11,7 +11,6 @@ using System.Windows.Forms;
 
 /*
  * Do zrobienia:
-1. zmienić lrc - uwzględnić adres, rozkaz i dane w przeliczaniu lrc
 2. wysyłanie i odbieranie danych na masterze
 3. Obsługę wewnętrzną slava
 4. W stacji MASTER i w stacji SLAVE należy umożliwić podgląd ramek wysłanej oraz
@@ -20,36 +19,40 @@ odebranej w kodzie heksadecymalnym.
 
 namespace Modbus
 {
+    
     struct Frame
     {
-        public char[] sof;
-        public char[] adres;
-        public char[] command;
-        public char[] msg;
-        public char[] lrc;
-        public char[] endMaker;
+        public byte sof;
+        public byte adres;
+        public byte command;
+        public byte[] msg;
+        public byte lrc;
+        public byte cr;
+        public byte lf;
 
-        public Frame(char[] sof, char[] endMaker)
+        public Frame(byte sof)
         {
             this.sof = sof;
-            this.endMaker = endMaker;
-            this.adres = null;
-            this.command = null;
+            this.cr = Encoding.ASCII.GetBytes("\r")[0];
+            this.lf = Encoding.ASCII.GetBytes("\n")[0];
+            this.adres = Encoding.ASCII.GetBytes("0")[0];
+            this.command = Encoding.ASCII.GetBytes("0")[0];
+            this.lrc = Encoding.ASCII.GetBytes("0")[0];
             this.msg = null;
-            this.lrc = null;
         }
 
         public void clearData()
         {
-            this.adres = null;
-            this.command = null;
+            this.adres = Encoding.ASCII.GetBytes("0")[0];
+            this.command = Encoding.ASCII.GetBytes("0")[0];
             this.msg = null;
-            this.lrc = null;
+            this.lrc = Encoding.ASCII.GetBytes("0")[0];
         }
     }
 
     public partial class Form1 : Form
     {
+
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
         Frame frame;
@@ -57,7 +60,8 @@ namespace Modbus
         public Form1()
         {
             InitializeComponent();
-            frame = new Frame(":".ToCharArray(), "/r/n".ToCharArray());
+            frame = new Frame(Encoding.ASCII.GetBytes(":")[0]);
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -177,11 +181,23 @@ namespace Modbus
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             string data = serialPort.ReadExisting();
+            try
+            {
+                byte[] readValBytes = new byte[((SerialPort)sender).BytesToRead];
+                int iResult = ((SerialPort)sender).Read(readValBytes, 0, ((SerialPort)sender).BytesToRead);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public static byte calculateLRC(byte[] bytes)
+        public static byte calculateLRC(byte[] bytes, byte cr, byte lf)
         {
             byte LRC = 0;
+            LRC ^= cr;
+            LRC ^= lf;
             for (int i = 0; i < bytes.Length; i++)
             {
                 LRC ^= bytes[i];
@@ -191,22 +207,58 @@ namespace Modbus
 
         private void buttonMasterDataSend_Click(object sender, EventArgs e)
         {
+            StringBuilder str;
+
+
             //Tworzenie ramki z wybranych danych
             //wysyłamy to gówno po znaku z ograniczeniem czasowym, stąd chary
-            frame.adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
-            frame.command = comboBoxOrderCode.Text.ToCharArray();
-            frame.msg = richTextBoxMasterSendMsg.Text.ToCharArray();
-            frame.lrc = calculateLRC(Encoding.ASCII.GetBytes(new string(frame.adres) + new string(frame.command) + richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
+            //Encoding.ASCII.GetBytes()
+            frame.adres = Encoding.ASCII.GetBytes(numericUpDownTransactionAdres.Value.ToString().ToCharArray())[0];
+            frame.command = Encoding.ASCII.GetBytes(comboBoxOrderCode.Text.ToCharArray())[0];
+            frame.msg = Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToCharArray());
+            frame.lrc = calculateLRC(frame.msg, frame.cr, frame.lf);
+
+            int msgLength = 6 + frame.msg.Length;
+            if (frame.msg.Length > 0)
+            {
+                byte[] bytesToSend = new byte[msgLength];
+                bytesToSend[0] = frame.sof;
+                bytesToSend[1] = frame.adres;
+                bytesToSend[2] = frame.command;
+                for (int i = 3; i < msgLength-3; i++)
+                {
+                    bytesToSend[i] = frame.msg[i-3];
+                }
+                bytesToSend[msgLength-3] = frame.lrc;
+                bytesToSend[msgLength-2] = frame.cr;
+                bytesToSend[msgLength-1] = frame.lf;
+
+                try
+                {
+                    serialPort.Write(bytesToSend, 0, bytesToSend.Length);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
             try
-            {   //ustawianie portu - wymaga wielu zmian
+            {
+                buttonMasterDataSend.Enabled = true;
+                buttonMasterConnect.Enabled = false;
+                buttonMasterDisconnect.Enabled = true;
+                comboBoxFrameCharSpace.Enabled = false;
+
+                //ustawianie portu
                 serialPort.PortName = comboBoxMasterPort.Text;
                 //ograniczenie czasowe wysłania danych
                 serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
+                serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
 
                 serialPort.Open();
 
@@ -216,9 +268,7 @@ namespace Modbus
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            buttonMasterDataSend.Enabled = true;
-            buttonMasterConnect.Enabled = false;
-            buttonMasterDisconnect.Enabled = true;
+            
         }
 
         private void comboBoxPort_SelectedIndexChanged(object sender, EventArgs e)
@@ -231,15 +281,15 @@ namespace Modbus
             try
             {
                 serialPort.Close();
+                buttonMasterDisconnect.Enabled = false;
+                buttonMasterConnect.Enabled = true;
+                buttonMasterDataSend.Enabled = false;
+                comboBoxFrameCharSpace.Enabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            buttonMasterDisconnect.Enabled = false;
-            buttonMasterConnect.Enabled = true;
-            buttonMasterDataSend.Enabled = false;
         }
 
         private void sendData()
@@ -271,5 +321,6 @@ namespace Modbus
                 richTextBoxMasterReceivedMsg.Text += data;
             }
         }
+
     }
 }
