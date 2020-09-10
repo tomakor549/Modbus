@@ -181,7 +181,6 @@ namespace Modbus
 
         public static byte calculateLRC(byte[] bytes)
         {
-            //Do poprawy
             byte LRC = 0;
             for (int i = 0; i < bytes.Length; i++)
             {
