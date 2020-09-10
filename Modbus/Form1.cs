@@ -197,7 +197,7 @@ namespace Modbus
             frame.adres = numericUpDownTransactionAdres.Value.ToString().ToCharArray();
             frame.command = comboBoxOrderCode.Text.ToCharArray();
             frame.msg = richTextBoxMasterSendMsg.Text.ToCharArray();
-            frame.lrc = calculateLRC(Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
+            frame.lrc = calculateLRC(Encoding.ASCII.GetBytes(new string(frame.adres) + new string(frame.command) + richTextBoxMasterSendMsg.Text.ToString())).ToString().ToCharArray();
 
         }
 
