@@ -38,7 +38,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBoxRetransAdres = new System.Windows.Forms.ComboBox();
+            this.comboBoxRetransNumber = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.comboBoxTimeLimit = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -92,7 +92,6 @@
             // 
             // serialPort
             // 
-            this.serialPort.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(this.serialPort_ErrorReceived);
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // groupBoxMaster
@@ -148,7 +147,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.comboBoxRetransAdres);
+            this.groupBox1.Controls.Add(this.comboBoxRetransNumber);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
             this.groupBox1.Controls.Add(this.label4);
@@ -168,14 +167,14 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Ograniczenie Czasowe";
             // 
-            // comboBoxRetransAdres
+            // comboBoxRetransNumber
             // 
-            this.comboBoxRetransAdres.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxRetransAdres.FormattingEnabled = true;
-            this.comboBoxRetransAdres.Location = new System.Drawing.Point(6, 69);
-            this.comboBoxRetransAdres.Name = "comboBoxRetransAdres";
-            this.comboBoxRetransAdres.Size = new System.Drawing.Size(89, 21);
-            this.comboBoxRetransAdres.TabIndex = 9;
+            this.comboBoxRetransNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRetransNumber.FormattingEnabled = true;
+            this.comboBoxRetransNumber.Location = new System.Drawing.Point(6, 69);
+            this.comboBoxRetransNumber.Name = "comboBoxRetransNumber";
+            this.comboBoxRetransNumber.Size = new System.Drawing.Size(89, 21);
+            this.comboBoxRetransNumber.TabIndex = 9;
             // 
             // label5
             // 
@@ -451,7 +450,7 @@
         private System.Windows.Forms.Button buttonMasterDataSend;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBoxRetransAdres;
+        private System.Windows.Forms.ComboBox comboBoxRetransNumber;
         private System.Windows.Forms.ComboBox comboBoxFrameCharSpace;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
@@ -471,6 +470,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.ComboBox comboBoxSlavePort;
+        private System.Windows.Forms.Timer transactionTime;
     }
 }
 

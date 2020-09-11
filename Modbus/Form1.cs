@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
 
 /*
  * Do zrobienia:
-2. wysyłanie i odbieranie danych na masterze
-3. Obsługę wewnętrzną slava
-4. W stacji MASTER i w stacji SLAVE należy umożliwić podgląd ramek wysłanej oraz
-odebranej w kodzie heksadecymalnym.
+1. dodać sprawdzenie otrzymanych danych (LRC)
+2. uzupełnić unfoldFrame
+
 */
 
 namespace Modbus
@@ -23,7 +24,9 @@ namespace Modbus
     {
 
         private string frame;
-        private string receivedData;
+        private int retransmission;
+        private Stopwatch frameTime = new Stopwatch();
+        private System.Timers.Timer transactionTimeout = new System.Timers.Timer();
 
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
@@ -32,6 +35,72 @@ namespace Modbus
         {
             InitializeComponent();
 
+        }
+
+
+        public static string createFrame(byte transactionAdres, byte orderCode, string StringData)
+        {
+            //tworzenie LRC
+            byte LRC = 0;
+            LRC ^= transactionAdres;
+            LRC ^= orderCode;
+
+            //tworzenie ramki
+            string msg = ":" + string.Format("{0:X2}", transactionAdres) + string.Format("{0:X2}", orderCode);
+
+            if (!string.IsNullOrEmpty(StringData))
+            {
+                foreach (var bytesData in StringData)
+                {
+                    byte data = (byte)bytesData;
+                    LRC ^= data;
+                    msg += string.Format("{0:X2}", data);
+                }
+            }
+
+            msg += string.Format("{0:X2}", LRC);
+            msg += "\r\n";
+
+            return msg;
+        }
+
+        public static string unfoldFrame(string data)
+        {
+            return data;
+        }
+
+        private void sendFrame()
+        {
+            frame = createFrame((byte)Convert.ToByte(numericUpDownTransactionAdres.Value.ToString()), (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
+
+            try
+            {
+                if (serialPort.IsOpen)
+                {
+                    //wysłanie bufora na łącze
+                    serialPort.Write(frame);
+
+                    richTextBoxMasterSendMsg.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void timeReceive()
+        {
+            //Reakcja na minięcie czasu wykonania transakcji
+            retransmission--;
+            //sprawdzić, czy yrzeba wykonać retransmisję
+            if (retransmission <= 0)
+            {
+                MessageBox.Show("Brakodpowiedzi od stacji Slave");
+                return;
+            }
+
+            sendFrame(); //jeśli trzeba retransmitować te dane, to wywołujemy tą funkcję
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,9 +116,6 @@ namespace Modbus
             numericUpDownTransactionAdres.Maximum = 247;    //stąd, aby się nie przemęczać ograniczamy maksymalną ilość danych do posłania
             numericUpDownTransactionAdres.Minimum = 1;
 
-            //ograniczenie textboxa wysyłającego dane
-            richTextBoxMasterSendMsg.MaxLength = 252;
-
             //odczytanie dostępnych portów wraz z wpisanie ich do rozwijanej listy
             comboBoxMasterPort.Items.AddRange(SerialPort.GetPortNames());
 
@@ -62,13 +128,13 @@ namespace Modbus
             }
             for (int i = 0; i <= 5; i++)
             {
-                comboBoxRetransAdres.Items.Add(i);
+                comboBoxRetransNumber.Items.Add(i);
             }
 
             //ustawianie startowej wartości
             comboBoxTransaction.SelectedIndex = 0;
             comboBoxTimeLimit.SelectedIndex = 0;
-            comboBoxRetransAdres.SelectedIndex = 0;
+            comboBoxRetransNumber.SelectedIndex = 0;
             comboBoxFrameCharSpace.SelectedIndex = 0;
             comboBoxOrderCode.SelectedIndex = 0;
             if (comboBoxMasterPort.Items.Count > 0)
@@ -100,6 +166,10 @@ namespace Modbus
             serialPort.StopBits = System.IO.Ports.StopBits.One;
             serialPort.DtrEnable = true;
             serialPort.NewLine = "\r\n";
+
+            //ustawianie czasu
+            transactionTimeout.AutoReset = false;
+            transactionTimeout.Elapsed += delegate { timeReceive(); };
         }
 
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
@@ -153,64 +223,35 @@ namespace Modbus
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            string data = serialPort.ReadExisting();
             try
             {
-                byte[] readValBytes = new byte[((SerialPort)sender).BytesToRead];
-                int iResult = ((SerialPort)sender).Read(readValBytes, 0, ((SerialPort)sender).BytesToRead);
+                transactionTimeout.Stop();
+                frameTime.Restart();    //odliczamy czas wczytywania ramki
+                //wczytanie lini z serial portu do napotkania \n bez wczytania \n
+                string data = serialPort.ReadLine() + "\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
+                frameTime.Stop();       //zatrzymujemy odliczanie wczytywania ramki
+                //frameTime zwracamy w milisekundach i przeliczamy na ile milisekund przypada 1 znak z wczytanej ramki
+                //po czym sprawdzamy czy nie przekracza ograniczeniea czasowego na odstęp pomiędzy znakami ramki
+                if (frameTime.ElapsedMilliseconds / data.Length > Convert.ToInt32(comboBoxFrameCharSpace.Text))
+                {
+                    transactionTimeout.Start();
+                    return;
+                }
+                
+                richTextBoxMasterReceivedMsg.Text = unfoldFrame(data);
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-
-        public static string createFrame(byte transactionAdres, byte orderCode, string StringData)
-        {
-            //tworzenie LRC
-            byte LRC = 0;
-            LRC ^= transactionAdres;
-            LRC ^= orderCode;
-
-            //tworzenie ramki
-            string msg = ":" + string.Format("{0:X2}", transactionAdres) + string.Format("{0:X2}", orderCode);
-
-            if (!string.IsNullOrEmpty(StringData))
-            {
-                foreach (var bytesData in StringData)
-                {
-                    byte data = (byte)bytesData;
-                    LRC ^= data;
-                    msg += string.Format("{0:X2}", data);
-                }
-            }
-
-            msg += string.Format("{0:X2}", LRC);
-            msg += "\r\n";
-
-            return msg;
         }
 
         private void buttonMasterDataSend_Click(object sender, EventArgs e)
         {
-            frame = createFrame((byte)Convert.ToByte(numericUpDownTransactionAdres.Value), (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
-
-            try
-            {
-                if (serialPort.IsOpen)
-                {
-                    //wysłanie bufora na łącze
-                    serialPort.Write(frame);
-
-                    richTextBoxMasterSendMsg.Clear();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            if (Convert.ToInt32(comboBoxOrderCode.Text) == 2)
+                transactionTimeout.Start();
+            sendFrame();
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
@@ -221,13 +262,20 @@ namespace Modbus
                 buttonMasterConnect.Enabled = false;
                 buttonMasterDisconnect.Enabled = true;
                 comboBoxFrameCharSpace.Enabled = false;
+                comboBoxRetransNumber.Enabled = false;
+
+                //Ustawienie czasu oczekiwania na znak życia od slave'a
+                transactionTimeout.Interval = Convert.ToInt32(comboBoxTimeLimit.Text);
+
+                //ustawienie ilości retransmisji
+                retransmission = Convert.ToInt32(comboBoxRetransNumber.Text);
 
                 //ustawianie portu
                 serialPort.PortName = comboBoxMasterPort.Text;
 
                 //ograniczenie czasowe wysłania danych
-                serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
-                serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
+                //serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
+               // serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
 
                 serialPort.Open();
 
@@ -254,6 +302,7 @@ namespace Modbus
                 buttonMasterConnect.Enabled = true;
                 buttonMasterDataSend.Enabled = false;
                 comboBoxFrameCharSpace.Enabled = true;
+                comboBoxRetransNumber.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -261,34 +310,9 @@ namespace Modbus
             }
         }
 
-        private void sendData()
-        {
-
-        }
-
-        private void serialPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
-        {
-           
-        }
-
         private void richTextBoxMasterReceivedMsg_TextChanged(object sender, EventArgs e)
         {
-            string data = serialPort.ReadExisting();
-
-            //sprawdzenie czy komponent gdzie wypisywane są odebrane dane jest w tym samym wątku co odbiór danych
-            if (richTextBoxMasterReceivedMsg.InvokeRequired)
-            {
-                //utworzenie delegata (wskaźnika do mikro funkcji) metody do wpisywania danych w komponencie z bufora odbioru danych
-                Action act = () => richTextBoxMasterReceivedMsg.Text += data;
-
-                //wykonanie delegata dla wątku głównego
-                Invoke(act);   //wywołanie delegata
-            }
-            else
-            {
-                //jeżeli jest w tym samym wątku przepisz normalnie dane z bufora do komponentu
-                richTextBoxMasterReceivedMsg.Text += data;
-            }
+            
         }
 
     }
