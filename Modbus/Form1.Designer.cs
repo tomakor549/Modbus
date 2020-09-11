@@ -206,9 +206,9 @@
             // 
             // buttonMasterDisconnect
             // 
-            this.buttonMasterDisconnect.Location = new System.Drawing.Point(286, 165);
+            this.buttonMasterDisconnect.Location = new System.Drawing.Point(286, 168);
             this.buttonMasterDisconnect.Name = "buttonMasterDisconnect";
-            this.buttonMasterDisconnect.Size = new System.Drawing.Size(82, 76);
+            this.buttonMasterDisconnect.Size = new System.Drawing.Size(82, 73);
             this.buttonMasterDisconnect.TabIndex = 14;
             this.buttonMasterDisconnect.Text = "Rozłącz";
             this.buttonMasterDisconnect.UseVisualStyleBackColor = true;
@@ -324,7 +324,7 @@
             this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.comboBoxTransaction);
-            this.groupBox2.Location = new System.Drawing.Point(202, 19);
+            this.groupBox2.Location = new System.Drawing.Point(196, 19);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(172, 143);
             this.groupBox2.TabIndex = 0;

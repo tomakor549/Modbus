@@ -19,48 +19,18 @@ odebranej w kodzie heksadecymalnym.
 
 namespace Modbus
 {
-    
-    struct Frame
-    {
-        public byte sof;
-        public byte adres;
-        public byte command;
-        public byte[] msg;
-        public byte lrc;
-        public byte cr;
-        public byte lf;
-
-        public Frame(byte sof)
-        {
-            this.sof = sof;
-            this.cr = Encoding.ASCII.GetBytes("\r")[0];
-            this.lf = Encoding.ASCII.GetBytes("\n")[0];
-            this.adres = Encoding.ASCII.GetBytes("0")[0];
-            this.command = Encoding.ASCII.GetBytes("0")[0];
-            this.lrc = Encoding.ASCII.GetBytes("0")[0];
-            this.msg = null;
-        }
-
-        public void clearData()
-        {
-            this.adres = Encoding.ASCII.GetBytes("0")[0];
-            this.command = Encoding.ASCII.GetBytes("0")[0];
-            this.msg = null;
-            this.lrc = Encoding.ASCII.GetBytes("0")[0];
-        }
-    }
-
     public partial class Form1 : Form
     {
 
+        private string frame;
+        private string receivedData;
+
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
-        Frame frame;
 
         public Form1()
         {
             InitializeComponent();
-            frame = new Frame(Encoding.ASCII.GetBytes(":")[0]);
 
         }
 
@@ -117,6 +87,7 @@ namespace Modbus
             buttonMasterDataSend.Enabled = false;
             buttonMasterDisconnect.Enabled = false; 
             comboBoxMasterPort.Enabled = true;
+            richTextBoxMasterReceivedMsg.ReadOnly = true;
 
             //zmiana ustawień kontrolek
             richTextBoxMasterReceivedMsg.ReadOnly = true;
@@ -127,6 +98,8 @@ namespace Modbus
             //kontrola znaku
             serialPort.Parity = System.IO.Ports.Parity.None;
             serialPort.StopBits = System.IO.Ports.StopBits.One;
+            serialPort.DtrEnable = true;
+            serialPort.NewLine = "\r\n";
         }
 
         private void comboBoxProtocole_SelectedIndexChanged(object sender, EventArgs e)
@@ -193,56 +166,51 @@ namespace Modbus
             }
         }
 
-        public static byte calculateLRC(byte[] bytes, byte cr, byte lf)
+
+        public static string createFrame(byte transactionAdres, byte orderCode, string StringData)
         {
+            //tworzenie LRC
             byte LRC = 0;
-            LRC ^= cr;
-            LRC ^= lf;
-            for (int i = 0; i < bytes.Length; i++)
+            LRC ^= transactionAdres;
+            LRC ^= orderCode;
+
+            //tworzenie ramki
+            string msg = ":" + string.Format("{0:X2}", transactionAdres) + string.Format("{0:X2}", orderCode);
+
+            if (!string.IsNullOrEmpty(StringData))
             {
-                LRC ^= bytes[i];
+                foreach (var bytesData in StringData)
+                {
+                    byte data = (byte)bytesData;
+                    LRC ^= data;
+                    msg += string.Format("{0:X2}", data);
+                }
             }
-            return LRC;
+
+            msg += string.Format("{0:X2}", LRC);
+            msg += "\r\n";
+
+            return msg;
         }
 
         private void buttonMasterDataSend_Click(object sender, EventArgs e)
         {
-            StringBuilder str;
+            frame = createFrame((byte)Convert.ToByte(numericUpDownTransactionAdres.Value), (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
 
-
-            //Tworzenie ramki z wybranych danych
-            //wysyłamy to gówno po znaku z ograniczeniem czasowym, stąd chary
-            //Encoding.ASCII.GetBytes()
-            frame.adres = Encoding.ASCII.GetBytes(numericUpDownTransactionAdres.Value.ToString().ToCharArray())[0];
-            frame.command = Encoding.ASCII.GetBytes(comboBoxOrderCode.Text.ToCharArray())[0];
-            frame.msg = Encoding.ASCII.GetBytes(richTextBoxMasterSendMsg.Text.ToCharArray());
-            frame.lrc = calculateLRC(frame.msg, frame.cr, frame.lf);
-
-            int msgLength = 6 + frame.msg.Length;
-            if (frame.msg.Length > 0)
+            try
             {
-                byte[] bytesToSend = new byte[msgLength];
-                bytesToSend[0] = frame.sof;
-                bytesToSend[1] = frame.adres;
-                bytesToSend[2] = frame.command;
-                for (int i = 3; i < msgLength-3; i++)
+                if (serialPort.IsOpen)
                 {
-                    bytesToSend[i] = frame.msg[i-3];
-                }
-                bytesToSend[msgLength-3] = frame.lrc;
-                bytesToSend[msgLength-2] = frame.cr;
-                bytesToSend[msgLength-1] = frame.lf;
+                    //wysłanie bufora na łącze
+                    serialPort.Write(frame);
 
-                try
-                {
-                    serialPort.Write(bytesToSend, 0, bytesToSend.Length);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    richTextBoxMasterSendMsg.Clear();
                 }
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
@@ -256,6 +224,7 @@ namespace Modbus
 
                 //ustawianie portu
                 serialPort.PortName = comboBoxMasterPort.Text;
+
                 //ograniczenie czasowe wysłania danych
                 serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
                 serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
