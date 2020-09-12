@@ -54,21 +54,26 @@
             this.richTextBoxMasterSendMsg = new System.Windows.Forms.RichTextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBoxOrderCode = new System.Windows.Forms.ComboBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.numericUpDownTransactionAdres = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxTransaction = new System.Windows.Forms.ComboBox();
             this.groupBoxSlave = new System.Windows.Forms.GroupBox();
+            this.numericUpDownSlaveAdress = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.buttonSlaveConnect = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.richTextBoxSlaveSend = new System.Windows.Forms.RichTextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.comboBoxSlavePort = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.groupBoxMaster.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).BeginInit();
             this.groupBoxSlave.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSlaveAdress)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBoxProtocole
@@ -108,7 +113,6 @@
             this.groupBoxMaster.Controls.Add(this.richTextBoxMasterReceivedMsg);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDataSend);
             this.groupBoxMaster.Controls.Add(this.groupBoxFrame);
-            this.groupBoxMaster.Controls.Add(this.groupBox2);
             this.groupBoxMaster.Location = new System.Drawing.Point(15, 68);
             this.groupBoxMaster.Name = "groupBoxMaster";
             this.groupBoxMaster.Size = new System.Drawing.Size(374, 376);
@@ -151,7 +155,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBoxTimeLimit);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(12, 63);
+            this.groupBox1.Location = new System.Drawing.Point(184, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(166, 99);
             this.groupBox1.TabIndex = 6;
@@ -271,13 +275,17 @@
             // 
             // groupBoxFrame
             // 
+            this.groupBoxFrame.Controls.Add(this.label16);
+            this.groupBoxFrame.Controls.Add(this.comboBoxTransaction);
+            this.groupBoxFrame.Controls.Add(this.numericUpDownTransactionAdres);
+            this.groupBoxFrame.Controls.Add(this.label2);
             this.groupBoxFrame.Controls.Add(this.label9);
             this.groupBoxFrame.Controls.Add(this.richTextBoxMasterSendMsg);
             this.groupBoxFrame.Controls.Add(this.label8);
             this.groupBoxFrame.Controls.Add(this.comboBoxOrderCode);
-            this.groupBoxFrame.Location = new System.Drawing.Point(12, 168);
+            this.groupBoxFrame.Location = new System.Drawing.Point(12, 109);
             this.groupBoxFrame.Name = "groupBoxFrame";
-            this.groupBoxFrame.Size = new System.Drawing.Size(183, 113);
+            this.groupBoxFrame.Size = new System.Drawing.Size(183, 175);
             this.groupBoxFrame.TabIndex = 1;
             this.groupBoxFrame.TabStop = false;
             this.groupBoxFrame.Text = "Utwórz ramkę";
@@ -318,40 +326,28 @@
             this.comboBoxOrderCode.TabIndex = 4;
             this.comboBoxOrderCode.SelectedIndexChanged += new System.EventHandler(this.comboBoxOrderCode_SelectedIndexChanged);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.numericUpDownTransactionAdres);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.comboBoxTransaction);
-            this.groupBox2.Location = new System.Drawing.Point(196, 19);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(172, 143);
-            this.groupBox2.TabIndex = 0;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Transakcja";
-            // 
             // numericUpDownTransactionAdres
             // 
-            this.numericUpDownTransactionAdres.Location = new System.Drawing.Point(6, 79);
+            this.numericUpDownTransactionAdres.Location = new System.Drawing.Point(98, 38);
             this.numericUpDownTransactionAdres.Name = "numericUpDownTransactionAdres";
-            this.numericUpDownTransactionAdres.Size = new System.Drawing.Size(118, 20);
+            this.numericUpDownTransactionAdres.Size = new System.Drawing.Size(76, 20);
             this.numericUpDownTransactionAdres.TabIndex = 6;
             this.numericUpDownTransactionAdres.ValueChanged += new System.EventHandler(this.numericUpDownTransactionAdres_ValueChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 63);
+            this.label2.Location = new System.Drawing.Point(95, 22);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Adres";
+            this.label2.Text = "Adres docelowy";
             // 
             // comboBoxTransaction
             // 
             this.comboBoxTransaction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTransaction.FormattingEnabled = true;
-            this.comboBoxTransaction.Location = new System.Drawing.Point(6, 29);
+            this.comboBoxTransaction.Location = new System.Drawing.Point(9, 137);
             this.comboBoxTransaction.Name = "comboBoxTransaction";
             this.comboBoxTransaction.Size = new System.Drawing.Size(118, 21);
             this.comboBoxTransaction.TabIndex = 3;
@@ -359,6 +355,11 @@
             // 
             // groupBoxSlave
             // 
+            this.groupBoxSlave.Controls.Add(this.numericUpDownSlaveAdress);
+            this.groupBoxSlave.Controls.Add(this.label15);
+            this.groupBoxSlave.Controls.Add(this.buttonSlaveConnect);
+            this.groupBoxSlave.Controls.Add(this.label14);
+            this.groupBoxSlave.Controls.Add(this.richTextBoxSlaveSend);
             this.groupBoxSlave.Controls.Add(this.label13);
             this.groupBoxSlave.Controls.Add(this.label12);
             this.groupBoxSlave.Controls.Add(this.richTextBox1);
@@ -369,6 +370,50 @@
             this.groupBoxSlave.TabIndex = 3;
             this.groupBoxSlave.TabStop = false;
             this.groupBoxSlave.Text = "Slave";
+            // 
+            // numericUpDownSlaveAdress
+            // 
+            this.numericUpDownSlaveAdress.Location = new System.Drawing.Point(39, 109);
+            this.numericUpDownSlaveAdress.Name = "numericUpDownSlaveAdress";
+            this.numericUpDownSlaveAdress.Size = new System.Drawing.Size(118, 20);
+            this.numericUpDownSlaveAdress.TabIndex = 8;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(36, 93);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(34, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Adres";
+            // 
+            // buttonSlaveConnect
+            // 
+            this.buttonSlaveConnect.Location = new System.Drawing.Point(268, 171);
+            this.buttonSlaveConnect.Name = "buttonSlaveConnect";
+            this.buttonSlaveConnect.Size = new System.Drawing.Size(78, 73);
+            this.buttonSlaveConnect.TabIndex = 15;
+            this.buttonSlaveConnect.Text = "Połącz";
+            this.buttonSlaveConnect.UseVisualStyleBackColor = true;
+            this.buttonSlaveConnect.Click += new System.EventHandler(this.buttonSlaveConnect_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(45, 152);
+            this.label14.Name = "label14";
+            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.label14.Size = new System.Drawing.Size(94, 13);
+            this.label14.TabIndex = 17;
+            this.label14.Text = "Tekst do wysłania";
+            // 
+            // richTextBoxSlaveSend
+            // 
+            this.richTextBoxSlaveSend.Location = new System.Drawing.Point(39, 168);
+            this.richTextBoxSlaveSend.Name = "richTextBoxSlaveSend";
+            this.richTextBoxSlaveSend.Size = new System.Drawing.Size(201, 68);
+            this.richTextBoxSlaveSend.TabIndex = 18;
+            this.richTextBoxSlaveSend.Text = "";
             // 
             // label13
             // 
@@ -405,6 +450,15 @@
             this.comboBoxSlavePort.Size = new System.Drawing.Size(64, 21);
             this.comboBoxSlavePort.TabIndex = 15;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 121);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(60, 13);
+            this.label16.TabIndex = 9;
+            this.label16.Text = "Transakcja";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -424,11 +478,10 @@
             this.groupBox1.PerformLayout();
             this.groupBoxFrame.ResumeLayout(false);
             this.groupBoxFrame.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTransactionAdres)).EndInit();
             this.groupBoxSlave.ResumeLayout(false);
             this.groupBoxSlave.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSlaveAdress)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -440,7 +493,6 @@
         private System.Windows.Forms.Label label1;
         private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.GroupBox groupBoxMaster;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBoxTransaction;
         private System.Windows.Forms.GroupBox groupBoxSlave;
@@ -471,6 +523,12 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.ComboBox comboBoxSlavePort;
         private System.Windows.Forms.Timer transactionTime;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.RichTextBox richTextBoxSlaveSend;
+        private System.Windows.Forms.Button buttonSlaveConnect;
+        private System.Windows.Forms.NumericUpDown numericUpDownSlaveAdress;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
     }
 }
 

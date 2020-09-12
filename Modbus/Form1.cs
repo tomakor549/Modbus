@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Timers;
+using System.Globalization;
 
 /*
  * Do zrobienia:
@@ -27,6 +28,8 @@ namespace Modbus
         private int retransmission;
         private Stopwatch frameTime = new Stopwatch();
         private System.Timers.Timer transactionTimeout = new System.Timers.Timer();
+        private byte slaveStationAdress = 0;
+        private string slaveMsg;
 
         const string broadcastTransaction = "Rozgłoszeniowa";
         const string addressTransaction = "Adresowana";
@@ -64,14 +67,72 @@ namespace Modbus
             return msg;
         }
 
-        public static string unfoldFrame(string data)
+        public static byte convertLRC(byte transactionAdres, byte orderCode, string StringData)
         {
-            return data;
+            //tworzenie LRC
+            byte LRC = 0;
+            LRC ^= transactionAdres;
+            LRC ^= orderCode;
+
+            if (!string.IsNullOrEmpty(StringData))
+            {
+                foreach (var bytesData in StringData)
+                {
+                    LRC ^= (byte)bytesData;
+                }
+            }
+            return LRC;
+        }
+
+        public static string unfoldFrame(string message, byte stationAdress)
+        {
+
+
+            if (message.Length > 9)
+            {
+                if (string.IsNullOrEmpty(message) || message[0] != ':')
+                    return null;
+
+                byte adress = byte.Parse(message.Substring(1, 2), NumberStyles.HexNumber);
+                if (stationAdress != adress)
+                    return null;
+
+                byte code = byte.Parse(message.Substring(3, 2), NumberStyles.HexNumber);
+                byte lrc = byte.Parse(message.Substring(message.Length - 4, 2), NumberStyles.HexNumber);
+
+
+                if (lrc != convertLRC(adress, code, message.Substring(5, message.Length - 5)))
+                    return null;
+
+                string msg = message.Substring(5, message.Length - 5);
+
+                if (adress == 0)
+                {
+                    //wypisać "msg" w "tekst odebrany slave'a"
+                }
+                else if (code == 0)
+                {
+                    //sprawdzić adres docelowy, jak taki sam wypisać "msg" w "tekst odebrany slave'a"
+                }
+                else
+                {
+                    //sprawdzić adres docelowy, jak taki sam odesłąć tekst z "Tekst do wysłania" od slave'a i wysłać na mastera
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            return message;
         }
 
         private void sendFrame()
         {
-            frame = createFrame((byte)Convert.ToByte(numericUpDownTransactionAdres.Value.ToString()), (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
+            if(comboBoxTransaction.Text.ToString() == broadcastTransaction)
+                frame = createFrame((byte)0, (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
+            else
+                frame = createFrame((byte)Convert.ToByte(numericUpDownTransactionAdres.Value.ToString()), (byte)Convert.ToByte(comboBoxOrderCode.Text), richTextBoxMasterSendMsg.Text);
 
             try
             {
@@ -315,5 +376,10 @@ namespace Modbus
             
         }
 
+        private void buttonSlaveConnect_Click(object sender, EventArgs e)
+        {
+            slaveStationAdress = Convert.ToByte(numericUpDownSlaveAdress.Value);
+            slaveMsg = richTextBoxSlaveSend.Text;
+        }
     }
 }
