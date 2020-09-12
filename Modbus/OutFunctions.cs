@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 
 /*
- * Poprawić odbiór, coś z LRC
+ * Poprawić odbiór odowiedzi do mastera
  * 
  * */
 namespace Modbus
@@ -70,7 +70,7 @@ namespace Modbus
                 }
             }
 
-            msg += string.Format("{0:X2}", LRC);
+            msg += string.Format("{0:X2}", (byte)LRC);
             msg += "\r\n";
 
             return msg;
@@ -92,10 +92,10 @@ namespace Modbus
                 byte code = byte.Parse(message.Substring(3, 2), NumberStyles.HexNumber);
                 byte lrc = byte.Parse(message.Substring(message.Length - 4, 2), NumberStyles.HexNumber);
 
-                if (lrc != convertLRC(adress, code, message.Substring(5, message.Length - 5)))
+                string msg = message.Substring(5, message.Length - 5 - 4);
+                if (lrc != convertLRC((byte)adress, (byte)code, hexToString(msg)))
                     return null;
 
-                string msg = message.Substring(5, message.Length - 5);
 
                 FrameMainData frameMainData = new FrameMainData(adress, code, msg);
                 return frameMainData;
@@ -126,6 +126,31 @@ namespace Modbus
             }
 
             return null;
+        }
+
+        public string hexToString(string hexString)
+        {
+            try
+            {
+                string ascii = string.Empty;
+
+                for (int i = 0; i < hexString.Length; i += 2)
+                {
+                    String hs = string.Empty;
+
+                    hs = hexString.Substring(i, 2);
+                    uint decval = System.Convert.ToUInt32(hs, 16);
+                    char character = System.Convert.ToChar(decval);
+                    ascii += character;
+
+                }
+
+                return ascii;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            return string.Empty;
+
         }
     }
 }

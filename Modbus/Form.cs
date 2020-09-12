@@ -40,6 +40,7 @@ namespace Modbus
         const string master = "Master";
         string protocole;
         string frameSpace;
+        string slaveReply;
 
         public Form()
         {
@@ -245,7 +246,7 @@ namespace Modbus
                 //ograniczenie czasowe wysłania danych
                 //serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
                 // serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
-
+                slaveReply = richTextBoxSlaveSend.Text;
                 serialPort.Open();
 
             }
@@ -307,7 +308,11 @@ namespace Modbus
 
         private void sendSlaveFrame()
         {
-            frame = outFunctions.createFrame((byte)0, (byte)0, richTextBoxSlaveSend.Text);
+            if(slaveReply != "")
+            {
+                frame = outFunctions.createFrame((byte)0, (byte)0, slaveReply);
+            }
+            MessageBox.Show("Master prosi o odpowiedź, a twoja odpowiedź jest pusta!");
 
             try
             {
@@ -354,7 +359,7 @@ namespace Modbus
             frameTime.Restart();    //odliczamy czas wczytywania ramki
 
             //wczytanie lini z serial portu do napotkania \n bez wczytania \n
-            string msg = serialPort.ReadLine() + "\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
+            string msg = serialPort.ReadLine() + "\r\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
 
             frameTime.Stop();       //zatrzymujemy odliczanie wczytywania ramki
 
