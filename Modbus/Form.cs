@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Timers;
 using System.Globalization;
+using System.Threading;
 
 /*
  * Do zrobienia:
@@ -101,7 +102,11 @@ namespace Modbus
             buttonMasterDataSend.Enabled = false;
             buttonMasterDisconnect.Enabled = false; 
             comboBoxPort.Enabled = true;
+            buttonSlaveDisconnect.Enabled = false;
             richTextBoxMasterReceivedMsg.ReadOnly = true;
+            richTextBoxSlaveReceivedMsg.ReadOnly = true;
+            richTextBoxMasterReceiveFrame.ReadOnly = true;
+            richTextBoxSlaveReceiveFrame.ReadOnly = true;
 
             //zmiana ustawień kontrolek
             richTextBoxMasterReceivedMsg.ReadOnly = true;
@@ -168,7 +173,6 @@ namespace Modbus
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-
             try
             {
                 if (protocole == master)
@@ -185,6 +189,8 @@ namespace Modbus
 
         private void buttonMasterDataSend_Click(object sender, EventArgs e)
         {
+            //Ustawienie czasu oczekiwania na znak życia od slave'a
+            transactionTimeout.Interval = Convert.ToInt32(comboBoxMasterTimeLimit.Text);
             if (Convert.ToInt32(comboBoxOrderCode.Text) == 2)
                 transactionTimeout.Start();
             sendMasterFrame();
@@ -194,10 +200,6 @@ namespace Modbus
         {
             try
             {
-                componentMasterState(false);
-
-                //Ustawienie czasu oczekiwania na znak życia od slave'a
-                transactionTimeout.Interval = Convert.ToInt32(comboBoxMasterTimeLimit.Text);
 
                 //ustawienie ilości retransmisji
                 retransmission = Convert.ToInt32(comboBoxRetransNumber.Text);
@@ -217,7 +219,7 @@ namespace Modbus
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            
+            componentMasterState(false);
         }
 
         private void buttonMasterDisconnected_Click(object sender, EventArgs e)
@@ -237,7 +239,11 @@ namespace Modbus
         {
             try
             {
-                componentMasterState(false);
+                if (richTextBoxSlaveSend.Text == "")
+                {
+                    MessageBox.Show("Pole tekstu do wysłania nie może być puste");
+                    return;
+                }
                 slaveStationAdress = Convert.ToByte(numericUpDownSlaveAdress.Value);
 
                 //ustawianie portu
@@ -254,6 +260,7 @@ namespace Modbus
             {
                 MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            componentSlaveState();
         }
 
         public void componentMasterState(bool enabled)
@@ -267,6 +274,15 @@ namespace Modbus
             buttonMasterConnect.Enabled = enabled;
             buttonMasterDataSend.Enabled = !enabled;
             buttonMasterDisconnect.Enabled = !enabled;
+        }
+
+        public void componentSlaveState()
+        {
+            numericUpDownSlaveAdress.Enabled = !numericUpDownSlaveAdress.Enabled;
+            buttonSlaveConnect.Enabled = !buttonSlaveConnect.Enabled;
+            comboBoxSlaveFrameCharSpace.Enabled = !comboBoxSlaveFrameCharSpace.Enabled;
+            buttonSlaveDisconnect.Enabled = !buttonSlaveDisconnect.Enabled;
+            richTextBoxSlaveSend.Enabled = !richTextBoxSlaveSend.Enabled;
         }
 
         public void timeReceive()
@@ -312,7 +328,6 @@ namespace Modbus
             {
                 frame = outFunctions.createFrame((byte)0, (byte)0, slaveReply);
             }
-            MessageBox.Show("Master prosi o odpowiedź, a twoja odpowiedź jest pusta!");
 
             try
             {
@@ -320,8 +335,6 @@ namespace Modbus
                 {
                     //wysłanie bufora na łącze
                     serialPort.Write(frame);
-
-                    richTextBoxMasterSendMsg.Clear();
                 }
             }
             catch (Exception ex)
@@ -336,7 +349,7 @@ namespace Modbus
             frameTime.Restart();    //odliczamy czas wczytywania ramki
 
             //wczytanie lini z serial portu do napotkania \n bez wczytania \n
-            string msg = serialPort.ReadExisting() + "\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
+            string msg = serialPort.ReadLine() + "\r\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
 
             frameTime.Stop();       //zatrzymujemy odliczanie wczytywania ramki
 
@@ -348,6 +361,20 @@ namespace Modbus
                 return;
             }
 
+            if (richTextBoxMasterReceiveFrame.InvokeRequired)
+            {
+                //utworzenie delegata (wskaźnika do mikro funkcji) metody do wpisywania danych w komponencie z bufora odbioru danych
+                Action act = () => richTextBoxMasterReceiveFrame.Text += msg;
+
+                //wykonanie delegata dla wątku głównego
+                Invoke(act);   //wywołanie delegata
+            }
+            else
+            {
+                //jeżeli jest w tym samym wątku przepisz normalnie dane z bufora do komponentu
+                richTextBoxMasterReceiveFrame.Text += msg;
+            }
+
             msg = outFunctions.returnFrameData(msg);
 
             if(msg!=null)
@@ -356,10 +383,11 @@ namespace Modbus
 
         public void slaveReceive()
         {
+            string frameRcv;
             frameTime.Restart();    //odliczamy czas wczytywania ramki
 
             //wczytanie lini z serial portu do napotkania \n bez wczytania \n
-            string msg = serialPort.ReadLine() + "\r\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
+            string msg = frameRcv = serialPort.ReadLine() + "\r\n"; //\n dodajemy ręcznie, żeby data.Length nie był 0
 
             frameTime.Stop();       //zatrzymujemy odliczanie wczytywania ramki
 
@@ -391,6 +419,17 @@ namespace Modbus
                 {
                     if (frameData.code == (byte)1)
                     {
+                        if (richTextBoxMasterReceiveFrame.InvokeRequired)
+                        {
+                            Action act = () => richTextBoxMasterReceiveFrame.Text += frameRcv;
+
+                            Invoke(act);   //wywołanie delegata
+                        }
+                        else
+                        {
+                            richTextBoxMasterReceiveFrame.Text += frameRcv;
+                        }
+
                         slaveReceiveTxt(msg);
                     }
                     else
@@ -403,13 +442,13 @@ namespace Modbus
                 }
             }
         }
-        void slaveReceiveTxt(string txt)
+        void slaveReceiveTxt(string frame)
         {
             //sprawdzenie czy komponent gdzie wypisywane są odebrane dane jest w tym samym wątku co odbiór danych
-            if (richTextBoxSlaveReceivedMsg.InvokeRequired)
+            if (richTextBoxSlaveReceiveFrame.InvokeRequired)
             {
                 //utworzenie delegata (wskaźnika do mikro funkcji) metody do wpisywania danych w komponencie z bufora odbioru danych
-                Action act = () => richTextBoxSlaveReceivedMsg.Text += txt;
+                Action act = () => richTextBoxSlaveReceiveFrame.Text += frame;
 
                 //wykonanie delegata dla wątku głównego
                 Invoke(act);   //wywołanie delegata
@@ -417,12 +456,25 @@ namespace Modbus
             else
             {
                 //jeżeli jest w tym samym wątku przepisz normalnie dane z bufora do komponentu
-                richTextBoxSlaveReceivedMsg.Text += txt;
+                richTextBoxSlaveReceiveFrame.Text += frame;
+            }
+
+            string msg = outFunctions.hexToString(frame.Substring(5, frame.Length - 5 - 4));
+            if (richTextBoxSlaveReceivedMsg.InvokeRequired)
+            {
+                Action act = () => richTextBoxSlaveReceivedMsg.Text += msg;
+
+                Invoke(act);   //wywołanie delegata
+            }
+            else
+            {
+                richTextBoxSlaveReceivedMsg.Text += msg;
             }
         }
 
         void MasterReceiveTxt(string txt)
         {
+            txt = outFunctions.hexToString(txt);
             //sprawdzenie czy komponent gdzie wypisywane są odebrane dane jest w tym samym wątku co odbiór danych
             if (richTextBoxMasterReceivedMsg.InvokeRequired)
             {
@@ -442,6 +494,12 @@ namespace Modbus
         private void comboBoxModbusFrameCharSpace_SelectedIndexChanged(object sender, EventArgs e)
         {
             frameSpace = comboBoxModbusFrameCharSpace.Text;
+        }
+
+        private void buttonSlaveDisconnect_Click(object sender, EventArgs e)
+        {
+            serialPort.Close();
+            componentSlaveState();
         }
     }
 }

@@ -70,6 +70,10 @@
             this.richTextBoxSlaveSend = new System.Windows.Forms.RichTextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.richTextBoxSlaveReceivedMsg = new System.Windows.Forms.RichTextBox();
+            this.richTextBoxMasterReceiveFrame = new System.Windows.Forms.RichTextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.richTextBoxSlaveReceiveFrame = new System.Windows.Forms.RichTextBox();
             this.groupBoxMaster.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
@@ -103,6 +107,8 @@
             // 
             // groupBoxMaster
             // 
+            this.groupBoxMaster.Controls.Add(this.label18);
+            this.groupBoxMaster.Controls.Add(this.richTextBoxMasterReceiveFrame);
             this.groupBoxMaster.Controls.Add(this.label7);
             this.groupBoxMaster.Controls.Add(this.groupBox1);
             this.groupBoxMaster.Controls.Add(this.buttonMasterDisconnect);
@@ -135,7 +141,7 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBoxMasterTimeLimit);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(6, 182);
+            this.groupBox1.Location = new System.Drawing.Point(7, 177);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(344, 62);
             this.groupBox1.TabIndex = 6;
@@ -229,7 +235,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 250);
+            this.label10.Location = new System.Drawing.Point(6, 247);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(81, 13);
             this.label10.TabIndex = 9;
@@ -237,9 +243,9 @@
             // 
             // richTextBoxMasterReceivedMsg
             // 
-            this.richTextBoxMasterReceivedMsg.Location = new System.Drawing.Point(6, 268);
+            this.richTextBoxMasterReceivedMsg.Location = new System.Drawing.Point(6, 265);
             this.richTextBoxMasterReceivedMsg.Name = "richTextBoxMasterReceivedMsg";
-            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(207, 102);
+            this.richTextBoxMasterReceivedMsg.Size = new System.Drawing.Size(207, 48);
             this.richTextBoxMasterReceivedMsg.TabIndex = 9;
             this.richTextBoxMasterReceivedMsg.Text = "";
             // 
@@ -254,7 +260,7 @@
             this.groupBoxFrame.Controls.Add(this.label8);
             this.groupBoxFrame.Controls.Add(this.comboBoxOrderCode);
             this.groupBoxFrame.Controls.Add(this.buttonMasterDataSend);
-            this.groupBoxFrame.Location = new System.Drawing.Point(6, 19);
+            this.groupBoxFrame.Location = new System.Drawing.Point(6, 16);
             this.groupBoxFrame.Name = "groupBoxFrame";
             this.groupBoxFrame.Size = new System.Drawing.Size(357, 160);
             this.groupBoxFrame.TabIndex = 1;
@@ -362,13 +368,15 @@
             // 
             // groupBoxSlave
             // 
+            this.groupBoxSlave.Controls.Add(this.label19);
             this.groupBoxSlave.Controls.Add(this.label12);
+            this.groupBoxSlave.Controls.Add(this.richTextBoxSlaveReceiveFrame);
             this.groupBoxSlave.Controls.Add(this.buttonSlaveDisconnect);
             this.groupBoxSlave.Controls.Add(this.numericUpDownSlaveAdress);
-            this.groupBoxSlave.Controls.Add(this.comboBoxSlaveFrameCharSpace);
-            this.groupBoxSlave.Controls.Add(this.label17);
             this.groupBoxSlave.Controls.Add(this.label15);
             this.groupBoxSlave.Controls.Add(this.buttonSlaveConnect);
+            this.groupBoxSlave.Controls.Add(this.comboBoxSlaveFrameCharSpace);
+            this.groupBoxSlave.Controls.Add(this.label17);
             this.groupBoxSlave.Controls.Add(this.label14);
             this.groupBoxSlave.Controls.Add(this.richTextBoxSlaveSend);
             this.groupBoxSlave.Controls.Add(this.label13);
@@ -383,7 +391,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(178, 77);
+            this.label12.Location = new System.Drawing.Point(36, 207);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(158, 13);
             this.label12.TabIndex = 20;
@@ -397,10 +405,11 @@
             this.buttonSlaveDisconnect.TabIndex = 19;
             this.buttonSlaveDisconnect.Text = "Rozłącz";
             this.buttonSlaveDisconnect.UseVisualStyleBackColor = true;
+            this.buttonSlaveDisconnect.Click += new System.EventHandler(this.buttonSlaveDisconnect_Click);
             // 
             // numericUpDownSlaveAdress
             // 
-            this.numericUpDownSlaveAdress.Location = new System.Drawing.Point(228, 40);
+            this.numericUpDownSlaveAdress.Location = new System.Drawing.Point(18, 56);
             this.numericUpDownSlaveAdress.Name = "numericUpDownSlaveAdress";
             this.numericUpDownSlaveAdress.Size = new System.Drawing.Size(118, 20);
             this.numericUpDownSlaveAdress.TabIndex = 8;
@@ -409,7 +418,7 @@
             // 
             this.comboBoxSlaveFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSlaveFrameCharSpace.FormattingEnabled = true;
-            this.comboBoxSlaveFrameCharSpace.Location = new System.Drawing.Point(181, 93);
+            this.comboBoxSlaveFrameCharSpace.Location = new System.Drawing.Point(39, 223);
             this.comboBoxSlaveFrameCharSpace.Name = "comboBoxSlaveFrameCharSpace";
             this.comboBoxSlaveFrameCharSpace.Size = new System.Drawing.Size(118, 21);
             this.comboBoxSlaveFrameCharSpace.TabIndex = 11;
@@ -417,7 +426,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(305, 96);
+            this.label17.Location = new System.Drawing.Point(163, 226);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(20, 13);
             this.label17.TabIndex = 13;
@@ -426,7 +435,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(225, 24);
+            this.label15.Location = new System.Drawing.Point(15, 40);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(63, 13);
             this.label15.TabIndex = 7;
@@ -434,7 +443,7 @@
             // 
             // buttonSlaveConnect
             // 
-            this.buttonSlaveConnect.Location = new System.Drawing.Point(268, 171);
+            this.buttonSlaveConnect.Location = new System.Drawing.Point(18, 92);
             this.buttonSlaveConnect.Name = "buttonSlaveConnect";
             this.buttonSlaveConnect.Size = new System.Drawing.Size(78, 73);
             this.buttonSlaveConnect.TabIndex = 15;
@@ -445,7 +454,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(45, 152);
+            this.label14.Location = new System.Drawing.Point(162, 22);
             this.label14.Name = "label14";
             this.label14.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.label14.Size = new System.Drawing.Size(94, 13);
@@ -454,16 +463,16 @@
             // 
             // richTextBoxSlaveSend
             // 
-            this.richTextBoxSlaveSend.Location = new System.Drawing.Point(39, 168);
+            this.richTextBoxSlaveSend.Location = new System.Drawing.Point(156, 38);
             this.richTextBoxSlaveSend.Name = "richTextBoxSlaveSend";
-            this.richTextBoxSlaveSend.Size = new System.Drawing.Size(201, 68);
+            this.richTextBoxSlaveSend.Size = new System.Drawing.Size(201, 127);
             this.richTextBoxSlaveSend.TabIndex = 18;
             this.richTextBoxSlaveSend.Text = "";
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(45, 249);
+            this.label13.Location = new System.Drawing.Point(36, 249);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(81, 13);
             this.label13.TabIndex = 15;
@@ -473,9 +482,43 @@
             // 
             this.richTextBoxSlaveReceivedMsg.Location = new System.Drawing.Point(39, 265);
             this.richTextBoxSlaveReceivedMsg.Name = "richTextBoxSlaveReceivedMsg";
-            this.richTextBoxSlaveReceivedMsg.Size = new System.Drawing.Size(201, 74);
+            this.richTextBoxSlaveReceivedMsg.Size = new System.Drawing.Size(201, 48);
             this.richTextBoxSlaveReceivedMsg.TabIndex = 16;
             this.richTextBoxSlaveReceivedMsg.Text = "";
+            // 
+            // richTextBoxMasterReceiveFrame
+            // 
+            this.richTextBoxMasterReceiveFrame.Location = new System.Drawing.Point(6, 332);
+            this.richTextBoxMasterReceiveFrame.Name = "richTextBoxMasterReceiveFrame";
+            this.richTextBoxMasterReceiveFrame.Size = new System.Drawing.Size(207, 44);
+            this.richTextBoxMasterReceiveFrame.TabIndex = 15;
+            this.richTextBoxMasterReceiveFrame.Text = "";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(4, 316);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(86, 13);
+            this.label18.TabIndex = 16;
+            this.label18.Text = "Odebrana ramka";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(40, 316);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(86, 13);
+            this.label19.TabIndex = 18;
+            this.label19.Text = "Odebrana ramka";
+            // 
+            // richTextBoxSlaveReceiveFrame
+            // 
+            this.richTextBoxSlaveReceiveFrame.Location = new System.Drawing.Point(39, 332);
+            this.richTextBoxSlaveReceiveFrame.Name = "richTextBoxSlaveReceiveFrame";
+            this.richTextBoxSlaveReceiveFrame.Size = new System.Drawing.Size(207, 44);
+            this.richTextBoxSlaveReceiveFrame.TabIndex = 17;
+            this.richTextBoxSlaveReceiveFrame.Text = "";
             // 
             // Form
             // 
@@ -551,6 +594,10 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button buttonSlaveDisconnect;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.RichTextBox richTextBoxMasterReceiveFrame;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.RichTextBox richTextBoxSlaveReceiveFrame;
     }
 }
 

@@ -117,10 +117,9 @@ namespace Modbus
 
                 byte lrc = byte.Parse(frame.Substring(frame.Length - 4, 2), NumberStyles.HexNumber);
 
-                if (lrc != convertLRC(adress, code, frame.Substring(5, frame.Length - 5)))
+                string msg = frame.Substring(5, frame.Length - 5 - 4);
+                if (lrc != convertLRC((byte)adress, (byte)code, hexToString(msg)))
                     return null;
-
-                string msg = frame.Substring(5, frame.Length - 5);
 
                 return msg;
             }
