@@ -176,9 +176,35 @@ namespace Modbus
             try
             {
                 if (protocole == master)
+                {
                     masterReceive();
+
+                    if (comboBoxModbusFrameCharSpace.InvokeRequired)
+                    {
+                        Action act = () => Thread.Sleep(Convert.ToInt32(comboBoxModbusFrameCharSpace.Text));
+
+                        Invoke(act);   //wywołanie delegata
+                    }
+                    else
+                    {
+                        Thread.Sleep(Convert.ToInt32(comboBoxModbusFrameCharSpace.Text));
+                    }
+                }
                 else
+                {
                     slaveReceive();
+
+                    if (comboBoxModbusFrameCharSpace.InvokeRequired)
+                    {
+                        Action act = () => Thread.Sleep(Convert.ToInt32(comboBoxSlaveFrameCharSpace.Text));
+
+                        Invoke(act);   //wywołanie delegata
+                    }
+                    else
+                    {
+                        Thread.Sleep(Convert.ToInt32(comboBoxSlaveFrameCharSpace.Text));
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -206,10 +232,6 @@ namespace Modbus
 
                 //ustawianie portu
                 serialPort.PortName = comboBoxPort.Text;
-
-                //ograniczenie czasowe wysłania danych
-                //serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
-               // serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
 
                 serialPort.Open();
 
@@ -249,9 +271,6 @@ namespace Modbus
                 //ustawianie portu
                 serialPort.PortName = comboBoxPort.Text;
 
-                //ograniczenie czasowe wysłania danych
-                //serialPort.WriteTimeout = Convert.ToInt32(comboBoxTimeLimit.Text);
-                // serialPort.ReadTimeout = Convert.ToInt32(comboBoxFrameCharSpace.Text);
                 slaveReply = richTextBoxSlaveSend.Text;
                 serialPort.Open();
 
