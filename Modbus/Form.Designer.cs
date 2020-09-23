@@ -33,6 +33,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.groupBoxMaster = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.richTextBoxMasterReceiveFrame = new System.Windows.Forms.RichTextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -59,21 +61,21 @@
             this.label11 = new System.Windows.Forms.Label();
             this.comboBoxPort = new System.Windows.Forms.ComboBox();
             this.groupBoxSlave = new System.Windows.Forms.GroupBox();
+            this.buttonSlaveClear = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.richTextBoxSlaveReceiveFrame = new System.Windows.Forms.RichTextBox();
             this.buttonSlaveDisconnect = new System.Windows.Forms.Button();
             this.numericUpDownSlaveAdress = new System.Windows.Forms.NumericUpDown();
-            this.comboBoxSlaveFrameCharSpace = new System.Windows.Forms.ComboBox();
-            this.label17 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.buttonSlaveConnect = new System.Windows.Forms.Button();
+            this.comboBoxSlaveFrameCharSpace = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.richTextBoxSlaveSend = new System.Windows.Forms.RichTextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.richTextBoxSlaveReceivedMsg = new System.Windows.Forms.RichTextBox();
-            this.richTextBoxMasterReceiveFrame = new System.Windows.Forms.RichTextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.richTextBoxSlaveReceiveFrame = new System.Windows.Forms.RichTextBox();
+            this.buttonMasterClear = new System.Windows.Forms.Button();
             this.groupBoxMaster.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBoxFrame.SuspendLayout();
@@ -107,6 +109,7 @@
             // 
             // groupBoxMaster
             // 
+            this.groupBoxMaster.Controls.Add(this.buttonMasterClear);
             this.groupBoxMaster.Controls.Add(this.label18);
             this.groupBoxMaster.Controls.Add(this.richTextBoxMasterReceiveFrame);
             this.groupBoxMaster.Controls.Add(this.label7);
@@ -124,6 +127,23 @@
             this.groupBoxMaster.TabIndex = 2;
             this.groupBoxMaster.TabStop = false;
             this.groupBoxMaster.Text = "Master";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(4, 316);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(86, 13);
+            this.label18.TabIndex = 16;
+            this.label18.Text = "Odebrana ramka";
+            // 
+            // richTextBoxMasterReceiveFrame
+            // 
+            this.richTextBoxMasterReceiveFrame.Location = new System.Drawing.Point(6, 332);
+            this.richTextBoxMasterReceiveFrame.Name = "richTextBoxMasterReceiveFrame";
+            this.richTextBoxMasterReceiveFrame.Size = new System.Drawing.Size(207, 44);
+            this.richTextBoxMasterReceiveFrame.TabIndex = 15;
+            this.richTextBoxMasterReceiveFrame.Text = "";
             // 
             // label7
             // 
@@ -195,9 +215,9 @@
             // 
             // buttonMasterDisconnect
             // 
-            this.buttonMasterDisconnect.Location = new System.Drawing.Point(288, 302);
+            this.buttonMasterDisconnect.Location = new System.Drawing.Point(219, 295);
             this.buttonMasterDisconnect.Name = "buttonMasterDisconnect";
-            this.buttonMasterDisconnect.Size = new System.Drawing.Size(63, 56);
+            this.buttonMasterDisconnect.Size = new System.Drawing.Size(63, 46);
             this.buttonMasterDisconnect.TabIndex = 14;
             this.buttonMasterDisconnect.Text = "Rozłącz";
             this.buttonMasterDisconnect.UseVisualStyleBackColor = true;
@@ -205,9 +225,9 @@
             // 
             // buttonMasterConnect
             // 
-            this.buttonMasterConnect.Location = new System.Drawing.Point(219, 302);
+            this.buttonMasterConnect.Location = new System.Drawing.Point(288, 295);
             this.buttonMasterConnect.Name = "buttonMasterConnect";
-            this.buttonMasterConnect.Size = new System.Drawing.Size(63, 56);
+            this.buttonMasterConnect.Size = new System.Drawing.Size(75, 75);
             this.buttonMasterConnect.TabIndex = 6;
             this.buttonMasterConnect.Text = "Połącz";
             this.buttonMasterConnect.UseVisualStyleBackColor = true;
@@ -368,6 +388,7 @@
             // 
             // groupBoxSlave
             // 
+            this.groupBoxSlave.Controls.Add(this.buttonSlaveClear);
             this.groupBoxSlave.Controls.Add(this.label19);
             this.groupBoxSlave.Controls.Add(this.label12);
             this.groupBoxSlave.Controls.Add(this.richTextBoxSlaveReceiveFrame);
@@ -388,6 +409,25 @@
             this.groupBoxSlave.TabStop = false;
             this.groupBoxSlave.Text = "Slave";
             // 
+            // buttonSlaveClear
+            // 
+            this.buttonSlaveClear.Location = new System.Drawing.Point(268, 334);
+            this.buttonSlaveClear.Name = "buttonSlaveClear";
+            this.buttonSlaveClear.Size = new System.Drawing.Size(75, 36);
+            this.buttonSlaveClear.TabIndex = 21;
+            this.buttonSlaveClear.Text = "Wyczyść";
+            this.buttonSlaveClear.UseVisualStyleBackColor = true;
+            this.buttonSlaveClear.Click += new System.EventHandler(this.buttonSlaveClear_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(40, 316);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(86, 13);
+            this.label19.TabIndex = 18;
+            this.label19.Text = "Odebrana ramka";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -396,6 +436,14 @@
             this.label12.Size = new System.Drawing.Size(158, 13);
             this.label12.TabIndex = 20;
             this.label12.Text = "Odstęp pomiędzy znakami ramki";
+            // 
+            // richTextBoxSlaveReceiveFrame
+            // 
+            this.richTextBoxSlaveReceiveFrame.Location = new System.Drawing.Point(39, 332);
+            this.richTextBoxSlaveReceiveFrame.Name = "richTextBoxSlaveReceiveFrame";
+            this.richTextBoxSlaveReceiveFrame.Size = new System.Drawing.Size(207, 44);
+            this.richTextBoxSlaveReceiveFrame.TabIndex = 17;
+            this.richTextBoxSlaveReceiveFrame.Text = "";
             // 
             // buttonSlaveDisconnect
             // 
@@ -413,24 +461,6 @@
             this.numericUpDownSlaveAdress.Name = "numericUpDownSlaveAdress";
             this.numericUpDownSlaveAdress.Size = new System.Drawing.Size(118, 20);
             this.numericUpDownSlaveAdress.TabIndex = 8;
-            // 
-            // comboBoxSlaveFrameCharSpace
-            // 
-            this.comboBoxSlaveFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxSlaveFrameCharSpace.FormattingEnabled = true;
-            this.comboBoxSlaveFrameCharSpace.Location = new System.Drawing.Point(39, 223);
-            this.comboBoxSlaveFrameCharSpace.Name = "comboBoxSlaveFrameCharSpace";
-            this.comboBoxSlaveFrameCharSpace.Size = new System.Drawing.Size(118, 21);
-            this.comboBoxSlaveFrameCharSpace.TabIndex = 11;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(163, 226);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(20, 13);
-            this.label17.TabIndex = 13;
-            this.label17.Text = "ms";
             // 
             // label15
             // 
@@ -450,6 +480,24 @@
             this.buttonSlaveConnect.Text = "Połącz";
             this.buttonSlaveConnect.UseVisualStyleBackColor = true;
             this.buttonSlaveConnect.Click += new System.EventHandler(this.buttonSlaveConnect_Click);
+            // 
+            // comboBoxSlaveFrameCharSpace
+            // 
+            this.comboBoxSlaveFrameCharSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSlaveFrameCharSpace.FormattingEnabled = true;
+            this.comboBoxSlaveFrameCharSpace.Location = new System.Drawing.Point(39, 223);
+            this.comboBoxSlaveFrameCharSpace.Name = "comboBoxSlaveFrameCharSpace";
+            this.comboBoxSlaveFrameCharSpace.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxSlaveFrameCharSpace.TabIndex = 11;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(163, 226);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(20, 13);
+            this.label17.TabIndex = 13;
+            this.label17.Text = "ms";
             // 
             // label14
             // 
@@ -486,39 +534,15 @@
             this.richTextBoxSlaveReceivedMsg.TabIndex = 16;
             this.richTextBoxSlaveReceivedMsg.Text = "";
             // 
-            // richTextBoxMasterReceiveFrame
+            // buttonMasterClear
             // 
-            this.richTextBoxMasterReceiveFrame.Location = new System.Drawing.Point(6, 332);
-            this.richTextBoxMasterReceiveFrame.Name = "richTextBoxMasterReceiveFrame";
-            this.richTextBoxMasterReceiveFrame.Size = new System.Drawing.Size(207, 44);
-            this.richTextBoxMasterReceiveFrame.TabIndex = 15;
-            this.richTextBoxMasterReceiveFrame.Text = "";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(4, 316);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(86, 13);
-            this.label18.TabIndex = 16;
-            this.label18.Text = "Odebrana ramka";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(40, 316);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(86, 13);
-            this.label19.TabIndex = 18;
-            this.label19.Text = "Odebrana ramka";
-            // 
-            // richTextBoxSlaveReceiveFrame
-            // 
-            this.richTextBoxSlaveReceiveFrame.Location = new System.Drawing.Point(39, 332);
-            this.richTextBoxSlaveReceiveFrame.Name = "richTextBoxSlaveReceiveFrame";
-            this.richTextBoxSlaveReceiveFrame.Size = new System.Drawing.Size(207, 44);
-            this.richTextBoxSlaveReceiveFrame.TabIndex = 17;
-            this.richTextBoxSlaveReceiveFrame.Text = "";
+            this.buttonMasterClear.Location = new System.Drawing.Point(219, 347);
+            this.buttonMasterClear.Name = "buttonMasterClear";
+            this.buttonMasterClear.Size = new System.Drawing.Size(63, 23);
+            this.buttonMasterClear.TabIndex = 17;
+            this.buttonMasterClear.Text = "Czyść pola";
+            this.buttonMasterClear.UseVisualStyleBackColor = true;
+            this.buttonMasterClear.Click += new System.EventHandler(this.buttonMasterClear_Click);
             // 
             // Form
             // 
@@ -598,6 +622,8 @@
         private System.Windows.Forms.RichTextBox richTextBoxMasterReceiveFrame;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.RichTextBox richTextBoxSlaveReceiveFrame;
+        private System.Windows.Forms.Button buttonSlaveClear;
+        private System.Windows.Forms.Button buttonMasterClear;
     }
 }
 

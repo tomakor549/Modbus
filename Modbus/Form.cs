@@ -520,5 +520,17 @@ namespace Modbus
             serialPort.Close();
             componentSlaveState();
         }
+
+        private void buttonSlaveClear_Click(object sender, EventArgs e)
+        {
+            richTextBoxSlaveReceivedMsg.Clear();
+            richTextBoxSlaveReceiveFrame.Clear();
+        }
+
+        private void buttonMasterClear_Click(object sender, EventArgs e)
+        {
+            richTextBoxMasterReceivedMsg.Clear();
+            richTextBoxMasterReceiveFrame.Clear();
+        }
     }
 }
